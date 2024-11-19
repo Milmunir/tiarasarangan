@@ -12,7 +12,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const DaftarBooking = () => {
+const DaftarBooking = ( data ) => {
+  // console.log(data.list);
+  const options = {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  };
   const router = useRouter();
   const [bookingList, setBookingList] = useState([]);
   const [tamuList, setTamuList] = useState([]);
@@ -187,21 +194,21 @@ const DaftarBooking = () => {
             </tr>
           </thead>
           <tbody id="bookTableBody">
-            {currentItems.length > 0 ? (
-              currentItems.map((booking, index) => (
+            {data.list.length > 0 ? (
+              data.list.map((booking, index) => (
                 <tr key={index}>
                   <td className="border px-4 py-2">
                     {" "}
                     {indexOfFirstItem + index + 1}
                   </td>
-                  <td className="border px-4 py-2">{booking.idKamar}</td>
-                  <td className="border px-4 py-2">{booking.namaTamu}</td>
-                  <td className="border px-4 py-2">{booking.noTelepon}</td>
-                  <td className="border px-4 py-2">{booking.tanggalCheckIn}</td>
+                  <td className="border px-4 py-2">{booking.id_ruangan}</td>
+                  <td className="border px-4 py-2">{booking.nama}</td>
+                  <td className="border px-4 py-2">{booking.hp}</td>
+                  <td className="border px-4 py-2">{booking.masuk.toLocaleDateString('id-id', options)}</td>
                   <td className="border px-4 py-2">
-                    {booking.tanggalCheckOut}
+                    {booking.keluar.toLocaleDateString('id-id', options)}
                   </td>
-                  <td className="border px-4 py-2">{booking.harga}</td>
+                  <td className="border px-4 py-2">{booking.dp}</td>
                   <td className="border px-4 py-2">
                     <button
                       className="bg-green-600 hover:bg-green-500 text-white px-2 mx-1 py-1 rounded-md"

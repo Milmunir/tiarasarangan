@@ -51,7 +51,7 @@ const SidebarAdmin = () => {
         id="sidebar"
         className={`fixed inset-y-0 left-0 w-64 bg-red-700 text-white h-screen transition-transform transform ${
           isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 z-20`}
+        } md:translate-x-0 z-20 overflow-auto`}
       >
         <h1 className="logo text-4xl font-bold py-6 text-center">
           Villa Tiara
