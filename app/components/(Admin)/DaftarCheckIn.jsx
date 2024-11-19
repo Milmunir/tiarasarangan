@@ -129,14 +129,16 @@ const DaftarCheckIn = () => {
   };
 
   return (
-    <>
-      <h2 className="text-3xl font-bold text-center text-gray-800 mb-8 flex items-center justify-center">
+    <div className="fixed left-0 top-16 bottom-10 right-0 md:left-64 pt-14 pb-6 md:pt-10 px-8 overflow-y-auto">
+      <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-gray-200 mb-8 flex items-center justify-center">
         <FaCreditCard className="text-yellow-500 mr-2" />
         CheckOut Reservasi
       </h2>
 
-      <div className="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-lg">
-        <h3 className="text-xl font-bold mb-4">Daftar Kamar Aktif</h3>
+      <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg">
+        <h3 className="text-xl font-bold mb-4 text-gray-800 dark:text-gray-200">
+          Daftar Kamar Aktif
+        </h3>
 
         <div className="relative mb-4">
           <input
@@ -144,9 +146,9 @@ const DaftarCheckIn = () => {
             placeholder="Cari Berdasarkan Nama ID Kamar"
             value={searchTerm}
             onChange={handleSearch}
-            className="w-full p-2 pl-10 border rounded-md shadow-md focus:ring-2 focus:ring-yellow-500 focus:outline-none transition duration-300"
+            className="w-full p-2 pl-10 border border-gray-300 dark:border-gray-700 rounded-md shadow-md dark:bg-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-yellow-500 focus:outline-none transition duration-300"
           />
-          <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+          <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -154,17 +156,17 @@ const DaftarCheckIn = () => {
             currentItems.map((checkin, index) => (
               <div
                 key={index}
-                className="border p-4 rounded-lg shadow-md bg-gray-50 hover:shadow-lg transition-transform transform hover:scale-105"
+                className="border border-gray-200 dark:border-gray-700 p-4 rounded-lg shadow-md bg-gray-50 dark:bg-gray-800 hover:shadow-lg transition-transform transform hover:scale-105"
               >
                 <div className="flex flex-col justify-between h-full">
                   <div className="mb-4">
-                    <h4 className="text-lg font-bold text-gray-700">
+                    <h4 className="text-lg font-bold text-gray-700 dark:text-gray-200">
                       {checkin.idKamar}
                     </h4>
-                    <p className="text-gray-600 text-sm">
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">
                       Check-in: {checkin.tanggalCheckIn}
                     </p>
-                    <p className="text-gray-600 text-sm">
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">
                       Check-out: {checkin.tanggalCheckOut}
                     </p>
                   </div>
@@ -179,7 +181,7 @@ const DaftarCheckIn = () => {
               </div>
             ))
           ) : (
-            <div className="text-center py-4 col-span-full">
+            <div className="text-center py-4 col-span-full text-gray-800 dark:text-gray-200">
               Tidak ada check-in yang terdaftar
             </div>
           )}
@@ -189,7 +191,7 @@ const DaftarCheckIn = () => {
           <div className="mt-8 flex justify-between items-center">
             <Link
               href="/DaftarBooking"
-              className="flex items-center text-sm text-gray-600 hover:text-yellow-500 transition"
+              className="flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-yellow-500 transition"
             >
               <FaArrowLeft className="mr-2" />
               Kembali
@@ -205,7 +207,7 @@ const DaftarCheckIn = () => {
                   className={`mx-1 px-4 p-2 rounded ${
                     currentPage === index + 1
                       ? "bg-gradient-to-r from-orange-500 to-red-500 text-white"
-                      : "bg-gray-300"
+                      : "bg-gray-300 dark:bg-gray-700 dark:text-gray-300"
                   }`}
                 >
                   {index + 1}
@@ -219,38 +221,54 @@ const DaftarCheckIn = () => {
       {/* Modal Invoice */}
       {showInvoiceModal && invoiceData && (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 md:p-8 rounded-xl shadow-lg max-w-lg w-full mx-4">
-            <h3 className="text-2xl font-bold mb-4 text-center">
+          <div className="bg-white dark:bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg max-w-lg w-full mx-4">
+            <h3 className="text-2xl font-bold mb-4 text-center text-gray-800 dark:text-gray-200">
               Invoice Reservasi
             </h3>
             <div className="space-y-4">
-              <div className="flex justify-between border-b pb-2">
-                <span className="text-gray-700">Kode Invoice:</span>
-                <span className="font-semibold">INV-{invoiceData.idKamar}</span>
+              <div className="flex justify-between border-b pb-2 dark:border-gray-700">
+                <span className="text-gray-700 dark:text-gray-300">
+                  Kode Invoice:
+                </span>
+                <span className="font-semibold dark:text-gray-100">
+                  INV-{invoiceData.idKamar}
+                </span>
               </div>
-              <div className="flex justify-between border-b pb-2">
-                <span className="text-gray-700">Nama Tamu:</span>
-                <span className="font-semibold">{invoiceData.namaTamu}</span>
+              <div className="flex justify-between border-b pb-2 dark:border-gray-700">
+                <span className="text-gray-700 dark:text-gray-300">
+                  Nama Tamu:
+                </span>
+                <span className="font-semibold dark:text-gray-100">
+                  {invoiceData.namaTamu}
+                </span>
               </div>
-              <div className="flex justify-between border-b pb-2">
-                <span className="text-gray-700">Kamar:</span>
-                <span className="font-semibold">{invoiceData.idKamar}</span>
+              <div className="flex justify-between border-b pb-2 dark:border-gray-700">
+                <span className="text-gray-700 dark:text-gray-300">Kamar:</span>
+                <span className="font-semibold dark:text-gray-100">
+                  {invoiceData.idKamar}
+                </span>
               </div>
-              <div className="flex justify-between border-b pb-2">
-                <span className="text-gray-700">Check-in:</span>
-                <span className="font-semibold">
+              <div className="flex justify-between border-b pb-2 dark:border-gray-700">
+                <span className="text-gray-700 dark:text-gray-300">
+                  Check-in:
+                </span>
+                <span className="font-semibold dark:text-gray-100">
                   {invoiceData.tanggalCheckIn}
                 </span>
               </div>
-              <div className="flex justify-between border-b pb-2">
-                <span className="text-gray-700">Check-out:</span>
-                <span className="font-semibold">
+              <div className="flex justify-between border-b pb-2 dark:border-gray-700">
+                <span className="text-gray-700 dark:text-gray-300">
+                  Check-out:
+                </span>
+                <span className="font-semibold dark:text-gray-100">
                   {invoiceData.tanggalCheckOut}
                 </span>
               </div>
-              <div className="flex justify-between border-t pt-2">
-                <span className="font-bold">Total Biaya:</span>
-                <span className="font-bold">
+              <div className="flex justify-between border-t pt-2 dark:border-gray-700">
+                <span className="font-bold dark:text-gray-100">
+                  Total Biaya:
+                </span>
+                <span className="font-bold dark:text-gray-100">
                   {formatRupiah(invoiceData.harga)}
                 </span>
               </div>
@@ -272,7 +290,7 @@ const DaftarCheckIn = () => {
               </button>
               <button
                 onClick={() => setShowInvoiceModal(false)}
-                className="text-gray-600 hover:text-red-500 transition flex items-center justify-center"
+                className="text-gray-600 dark:text-gray-300 hover:text-red-500 transition flex items-center justify-center"
               >
                 <FaTimesCircle className="mr-2" />
                 Tutup
@@ -281,7 +299,7 @@ const DaftarCheckIn = () => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

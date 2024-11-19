@@ -6,7 +6,6 @@ import {
   FaArrowLeft,
   FaTrash,
   FaSearch,
-  FaSignInAlt,
 } from "react-icons/fa";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -79,8 +78,8 @@ const DaftarRiwayat = () => {
   };
 
   return (
-    <>
-      <h2 className="text-3xl font-bold text-center text-gray-800 mb-8 flex items-center justify-center">
+    <div className="fixed left-0 top-16 bottom-10 right-0 md:left-64 pt-14 pb-6 md:pt-10 px-8 overflow-y-auto">
+      <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-gray-200 mb-8 flex items-center justify-center">
         <FaBookOpen className="text-yellow-500 mr-2" />
         Daftar Riwayat
       </h2>
@@ -88,7 +87,7 @@ const DaftarRiwayat = () => {
       <div className="mt-6 flex justify-between items-center text-sm mb-6">
         <Link
           href="/Dashboard"
-          className="flex items-center text-md font-semibold text-gray-600 hover:text-yellow-500 transition"
+          className="flex items-center text-md font-semibold text-gray-600 dark:text-gray-400 hover:text-yellow-500 transition"
         >
           <FaArrowLeft className="text-yellow-500 mr-2" />
           Kembali
@@ -108,13 +107,13 @@ const DaftarRiwayat = () => {
           placeholder="Cari Berdasarkan Nama, ID Kamar, atau No Telepon"
           value={searchTerm}
           onChange={handleSearch}
-          className="w-full p-2 pl-10 border rounded-md shadow-md focus:ring-2 focus:ring-yellow-500 focus:outline-none transition duration-300"
+          className="w-full p-2 pl-10 border border-gray-300 dark:border-gray-700 rounded-md shadow-md dark:bg-gray-600 dark:text-gray-200 focus:ring-2 focus:ring-yellow-500 focus:outline-none transition duration-300"
         />
-        <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+        <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-300" />
       </div>
 
       {/* Tabel Reservasi */}
-      <div className="overflow-x-auto bg-white text-left shadow-lg rounded-lg">
+      <div className="overflow-x-auto bg-white dark:bg-gray-800 text-left shadow-lg rounded-lg">
         <table className="table-auto w-full">
           <thead>
             <tr className="bg-gradient-to-r from-orange-500 to-red-500 text-white">
@@ -131,19 +130,29 @@ const DaftarRiwayat = () => {
           <tbody id="riwayatTableBody">
             {currentItems.length > 0 ? (
               currentItems.map((riwayat, index) => (
-                <tr key={index}>
-                  <td className="border px-4 py-2">
+                <tr key={index} className="dark:text-gray-200">
+                  <td className="border px-4 py-2 dark:border-gray-700">
                     {indexOfFirstItem + index + 1}
                   </td>
-                  <td className="border px-4 py-2">{riwayat.idKamar}</td>
-                  <td className="border px-4 py-2">{riwayat.namaTamu}</td>
-                  <td className="border px-4 py-2">{riwayat.noTelepon}</td>
-                  <td className="border px-4 py-2">{riwayat.tanggalCheckIn}</td>
-                  <td className="border px-4 py-2">
+                  <td className="border px-4 py-2 dark:border-gray-700">
+                    {riwayat.idKamar}
+                  </td>
+                  <td className="border px-4 py-2 dark:border-gray-700">
+                    {riwayat.namaTamu}
+                  </td>
+                  <td className="border px-4 py-2 dark:border-gray-700">
+                    {riwayat.noTelepon}
+                  </td>
+                  <td className="border px-4 py-2 dark:border-gray-700">
+                    {riwayat.tanggalCheckIn}
+                  </td>
+                  <td className="border px-4 py-2 dark:border-gray-700">
                     {riwayat.tanggalCheckOut}
                   </td>
-                  <td className="border px-4 py-2">{riwayat.harga}</td>
-                  <td className="border px-4 py-2">
+                  <td className="border px-4 py-2 dark:border-gray-700">
+                    {riwayat.harga}
+                  </td>
+                  <td className="border px-4 py-2 dark:border-gray-700">
                     <button
                       onClick={() => handleDelete(riwayat.id)}
                       className="bg-red-500 hover:bg-red-600 text-white px-2 mx-1 py-1 rounded-md"
@@ -155,7 +164,7 @@ const DaftarRiwayat = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="7" className="text-center py-4">
+                <td colSpan="7" className="text-center py-4 dark:text-gray-400">
                   Tidak ada riwayat yang terdaftar
                 </td>
               </tr>
@@ -168,7 +177,7 @@ const DaftarRiwayat = () => {
         <div>
           <button
             onClick={handleClearData}
-            className=" py-2 px-4 bg-gray-500 text-white rounded-md hover:bg-gray-600"
+            className=" py-2 px-4 bg-gray-500 dark:bg-gray-700 text-white rounded-md hover:bg-gray-600 dark:hover:bg-gray-800"
           >
             Clear Data
           </button>
@@ -183,7 +192,7 @@ const DaftarRiwayat = () => {
                 className={`mx-1 px-4 p-2 rounded ${
                   currentPage === index + 1
                     ? "bg-gradient-to-r from-orange-500 to-red-500 text-white"
-                    : "bg-gray-300"
+                    : "bg-gray-300 dark:bg-gray-700 dark:text-gray-300"
                 }`}
               >
                 {index + 1}
@@ -192,7 +201,7 @@ const DaftarRiwayat = () => {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

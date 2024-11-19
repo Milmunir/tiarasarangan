@@ -47,19 +47,19 @@ const TambahBooking = (data) => {
   };
 
   return (
-    <>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
-        <div className="bg-white py-8 px-12 rounded-xl shadow-lg md:col-span-2">
-          <h2 className="text-2xl font-bold mb-8 text-center flex items-center justify-center">
+    <div className="fixed left-0 top-16 bottom-10 right-0 md:left-64 py-14 md:pt-10 px-8 overflow-y-auto">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-white dark:bg-gray-800 py-8 px-12 rounded-xl shadow-lg md:col-span-2">
+          <h2 className="text-2xl font-bold mb-8 text-center flex items-center justify-center text-gray-800 dark:text-gray-200">
             <FaHotel className="text-yellow-500 mr-2" /> Tambah Booking
           </h2>
           <MapKamar room={data.kamar} changeTanggal={setSelectedDate} booked={booked} clicked={handleRoomClick} />
           <div className="p-4 bg-gray-200 rounded-xl mt-4 shadow-lg border-2 border-gray-400">
             <div className="grid grid-cols-1 md:grid-cols-11 gap-2">
-              <div className="flex p-2 col-span-4 items-center shadow-md justify-start rounded-lg bg-white">
+              <div className="flex p-2 md:col-span-4 items-center shadow-md justify-start rounded-lg bg-white dark:bg-gray-800">
                 <FaBed className="text-yellow-600 text-xl mx-4" />
                 <div>
-                  <h4 className="text-xs font-semibold text-gray-700">
+                  <h4 className="text-xs font-semibold text-gray-700 dark:text-gray-300">
                     Jumlah Bed:
                   </h4>
                   <p className="text-gray-800 text-md font-bold">
@@ -67,10 +67,10 @@ const TambahBooking = (data) => {
                   </p>
                 </div>
               </div>
-              <div className="flex p-2 col-span-3 items-center shadow-md justify-start rounded-lg bg-white">
+              <div className="flex p-2 md:col-span-3 items-center shadow-md justify-start rounded-lg bg-white dark:bg-gray-800">
                 <FaTags className="text-yellow-600 text-xl mx-4" />
                 <div>
-                  <h4 className="text-xs font-semibold text-gray-700">
+                  <h4 className="text-xs font-semibold text-gray-700 dark:text-gray-300">
                     Status:
                   </h4>
                   <p className={`text-gray-800 text-md font-bold ${selectedStatus === "kosong" ? "text-green-600" : "text-red-600"}`}>
@@ -78,10 +78,10 @@ const TambahBooking = (data) => {
                   </p>
                 </div>
               </div>
-              <div className="flex p-2 col-span-4 items-center shadow-md justify-start rounded-lg bg-white">
+              <div className="flex p-2 md:col-span-4 items-center shadow-md justify-start rounded-lg bg-white dark:bg-gray-800">
                 <FaDollarSign className="text-yellow-600 text-xl mx-4" />
                 <div>
-                  <h4 className="text-xs font-semibold text-gray-700">
+                  <h4 className="text-xs font-semibold text-gray-700 dark:text-gray-300">
                     Harga per Malam :
                   </h4>
                   <p className="text-gray-800 text-md font-bold">
@@ -92,10 +92,11 @@ const TambahBooking = (data) => {
             </div>
           </div>
         </div>
+
         {/* form booking */}
         <FormBooking room={selectedRoom} tipe={tipe[selectedRoom.tipe]} clear={handleClear} promo={data.promo} />
       </div>
-    </>
+    </div>
   );
 };
 
