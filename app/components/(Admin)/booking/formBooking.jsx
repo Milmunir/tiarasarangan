@@ -24,9 +24,10 @@ export default function FormBooking(data) {
             const total = daysDifference * HargaAsli;
             const hargaAkhir = promoNow? promoHandler(total, promoNow) : total;
             setHargaAsli(hargaAkhir);
-            setTotalHarga(hargaAkhir);
+            setTotalHarga(total);
         };
     };
+
     function promoHandler(harga, promo) {
         if (promo.amount != null) {
             return harga-promo.amount;
@@ -35,6 +36,7 @@ export default function FormBooking(data) {
             return harga-(harga*promo.percent/100);
         }
     };
+
     function checkInChange(date) {
         setcheckIn(date)
         date = new Date(date);
