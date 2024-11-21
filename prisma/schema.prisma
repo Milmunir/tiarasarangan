@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model rooms {
+  id           Int            @id @default(autoincrement())
+  nomor        String         @db.VarChar(255)
+  villa        Int
+  tipe         Int
+  status       String         @default("kosong") @db.VarChar(255)
+  harga        Int
+  created_at   DateTime?      @default(now())
+  updated_at   DateTime?      @updatedAt
+  reservations reservations[]
+}
+
+model users {
+  id                BigInt    @id @default(autoincrement())
+  name              String    @db.VarChar(255)
+  email             String    @unique(map: "users_email_unique") @db.VarChar(255)
+  email_verified_at DateTime? @db.Timestamp(0)
+  password          String    @db.VarChar(255)
+  remember_token    String?   @db.VarChar(100)
+  created_at        DateTime? @default(now())
+  updated_at        DateTime? @updatedAt
+}
+
+model admins {
+  id         BigInt    @id @default(autoincrement())
+  username   String    @db.VarChar(255)
+  password   String    @db.VarChar(255)
+  role       Int       @default(2)
+  created_at DateTime? @default(now())
+  updated_at DateTime? @updatedAt
+  logs       logs[]
+}
+
+model promo {
+  id         Int       @id @default(autoincrement())
+  code       String    @db.VarChar(255)
+  amount     Int?
+  percent    Int?
+  day        Json?     @default("{ \"monday\": true, \"tuesday\": true, \"wednesday\": true, \"thursday\": true, \"friday\": true, \"saturday\": false, \"sunday\": false }") @db.Json
+  mulai      DateTime? @db.Timestamp(0)
+  sampai     DateTime? @db.Timestamp(0)
+  created_at DateTime? @default(now())
+  updated_at DateTime? @updatedAt
+}
+
+model guests {
+  id         BigInt    @id @default(autoincrement())
+  nama       String    @db.VarChar(255)
+  lembaga    String?   @db.VarChar(255)
+  keterangan String?   @db.VarChar(255)
+  hp         String?   @db.VarChar(255)
+  created_at DateTime? @default(now())
+  updated_at DateTime? @updatedAt
+  deleted_at DateTime? @db.Timestamp(0)
+}
+
+model logs {
+  id       BigInt   @id @default(autoincrement())
+  admin_id BigInt
+  action   String   @db.VarChar(255)
+  before   String?  @db.VarChar(255)
+  after    String?  @db.VarChar(255)
+  time     DateTime @db.Date
+  admins   admins   @relation(fields: [admin_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "logs_admin_id_foreign")
+}
+
+model reservations {
+  id         Int       @id @default(autoincrement())
+  noinvoice  String    @db.VarChar(255)
+  id_ruangan Int
+  nama       String    @db.VarChar(255)
+  status     String    @default("notPaid") @db.VarChar(255)
+  hp         String    @db.VarChar(255)
+  dp         Int?
+  asli       Int?
+  total      Int?
+  promo      String?
+  masuk      DateTime  @db.Timestamp(0)
+  keluar     DateTime  @db.Timestamp(0)
+  created_at DateTime? @default(now())
+  updated_at DateTime? @updatedAt
+  deleted_at DateTime? @db.Timestamp(0)
+  rooms      rooms     @relation(fields: [id_ruangan], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "reservations_id_ruangan_foreign")
+}

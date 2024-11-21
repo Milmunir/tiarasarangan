@@ -18,15 +18,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
 
-const DaftarBooking = () => {
-  const getCurrentDate = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    const day = String(today.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
+const DaftarBooking = ( data ) => {
+  // console.log(data.list);
+  const options = {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
   };
-
   const router = useRouter();
   const today = new Date().toISOString().split("T")[0];
 
@@ -362,31 +361,22 @@ const DaftarBooking = () => {
             </tr>
           </thead>
           <tbody id="bookTableBody">
-            {currentItems.length > 0 ? (
-              currentItems.map((booking, index) => (
-                <tr key={index} className="dark:text-gray-200">
-                  <td className="border px-4 py-2 dark:border-gray-700">
+            {data.list.length > 0 ? (
+              data.list.map((booking, index) => (
+                <tr key={index}>
+                  <td className="border px-4 py-2">
+                    {" "}
                     {indexOfFirstItem + index + 1}
                   </td>
-                  <td className="border px-4 py-2 dark:border-gray-700">
-                    {booking.idKamar}
+                  <td className="border px-4 py-2">{booking.id_ruangan}</td>
+                  <td className="border px-4 py-2">{booking.nama}</td>
+                  <td className="border px-4 py-2">{booking.hp}</td>
+                  <td className="border px-4 py-2">{booking.masuk.toLocaleDateString('id-id', options)}</td>
+                  <td className="border px-4 py-2">
+                    {booking.keluar.toLocaleDateString('id-id', options)}
                   </td>
-                  <td className="border px-4 py-2 dark:border-gray-700">
-                    {booking.namaTamu}
-                  </td>
-                  <td className="border px-4 py-2 dark:border-gray-700">
-                    {booking.noTelepon}
-                  </td>
-                  <td className="border px-4 py-2 dark:border-gray-700">
-                    {booking.tanggalCheckIn}
-                  </td>
-                  <td className="border px-4 py-2 dark:border-gray-700">
-                    {booking.tanggalCheckOut}
-                  </td>
-                  <td className="border px-4 py-2 dark:border-gray-700">
-                    {booking.harga}
-                  </td>
-                  <td className="border px-4 py-2 dark:border-gray-700">
+                  <td className="border px-4 py-2">{booking.dp}</td>
+                  <td className="border px-4 py-2">
                     <button
                       className="bg-green-600 hover:bg-green-500 text-white px-2 mx-1 py-1 rounded-md"
                       onClick={() => handleCheckInClick(booking.id)}
