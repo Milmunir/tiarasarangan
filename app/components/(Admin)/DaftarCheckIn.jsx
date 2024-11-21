@@ -136,10 +136,6 @@ const DaftarCheckIn = () => {
       </h2>
 
       <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg">
-        <h3 className="text-xl font-bold mb-4 text-gray-800 dark:text-gray-200">
-          Daftar Kamar Aktif
-        </h3>
-
         <div className="relative mb-4">
           <input
             type="text"
@@ -187,8 +183,8 @@ const DaftarCheckIn = () => {
           )}
         </div>
 
-        <div className="flex items-center justify-between my-6 mb-8">
-          <div className="mt-8 flex justify-between items-center">
+        <div className="flex items-center justify-between mt-8">
+          <div>
             <Link
               href="/DaftarBooking"
               className="flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-yellow-500 transition"
@@ -284,7 +280,7 @@ const DaftarCheckIn = () => {
               </button>
               <button
                 onClick={() => handleCheckOutClick(invoiceData.id)}
-                className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg transition flex items-center justify-center"
+                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg transition flex items-center justify-center"
               >
                 <FaSignOutAlt className="mr-2" /> Check Out
               </button>

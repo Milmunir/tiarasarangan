@@ -1,4 +1,4 @@
-const kamarList = {
+const kamarLists = {
   VillaTiara1: [
     {
       kodeKamar: "VT1-0301",
@@ -174,4 +174,4 @@ const kamarList = {
   ],
 };
 
-export default kamarList;
+export default kamarLists;

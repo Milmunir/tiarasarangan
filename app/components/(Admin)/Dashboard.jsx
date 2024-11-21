@@ -1,31 +1,127 @@
 "use client";
-import { FaBed, FaCalendar, FaUsers, FaStar } from "react-icons/fa";
-import kamarList from "./TambahKamar";
-import { useEffect, useContext } from "react";
+import { FaBed, FaCalendar, FaUsers, FaDollarSign } from "react-icons/fa";
+import kamarLists from "./TambahKamar";
+import { useState, useEffect, useContext } from "react";
 import { DarkModeContext } from "@/app/(contexts)/DarkModeContext";
 
 const DashboardAdmin = () => {
+  const today = new Date().toISOString().split("T")[0];
+  const [bookingList, setBookingList] = useState([]);
+  const [checkInList, setCheckInList] = useState([]);
+  const [tamuList, setTamuList] = useState([]);
+  const [riwayatList, setRiwayatList] = useState([]);
+  const [totalRooms, setTotalRooms] = useState(0);
+  const [selectedDate, setSelectedDate] = useState(today);
   const { isDarkMode } = useContext(DarkModeContext);
+
   useEffect(() => {
-    // Konversi objek JSON ke string
-    const jsonData = JSON.stringify(kamarList);
-    // Simpan ke local storage dengan kunci "kamarList"
+    const jsonData = JSON.stringify(kamarLists);
     localStorage.setItem("kamarList", jsonData);
-    console.log(
-      "Data telah disimpan ke local storage:",
-      localStorage.getItem("kamarList")
-    );
+    console.log(localStorage.getItem("kamarList"));
+
+    const storedBookingList =
+      JSON.parse(localStorage.getItem("bookingList")) || [];
+    const storedCheckInList =
+      JSON.parse(localStorage.getItem("checkInList")) || [];
+    const storedTamuList = JSON.parse(localStorage.getItem("tamuList")) || [];
+    const storedRiwayatList =
+      JSON.parse(localStorage.getItem("riwayatList")) || [];
+    const storedKamarList = JSON.parse(localStorage.getItem("kamarList")) || {
+      VillaTiara1: [],
+      VillaTiara2: [],
+    };
+
+    setBookingList(storedBookingList);
+    setCheckInList(storedCheckInList);
+    setTamuList(storedTamuList);
+    setRiwayatList(storedRiwayatList);
+
+    // Hitung total kamar dari VillaTiara1 dan VillaTiara2
+    const total =
+      (storedKamarList.VillaTiara1 || []).length +
+      (storedKamarList.VillaTiara2 || []).length;
+    setTotalRooms(total);
   }, []);
+
+  // Fungsi untuk menghitung jumlah occupied rooms berdasarkan tanggal
+  const calculateOccupiedRooms = (date) => {
+    const dateObj = new Date(date);
+
+    // Filter kamar dari bookingList dan checkInList
+    const occupiedFromBooking = bookingList.filter(
+      (booking) =>
+        new Date(booking.tanggalCheckIn) <= dateObj &&
+        new Date(booking.tanggalCheckOut) >= dateObj
+    );
+
+    const occupiedFromCheckIn = checkInList.filter(
+      (checkin) =>
+        new Date(checkin.tanggalCheckIn) <= dateObj &&
+        new Date(checkin.tanggalCheckOut) >= dateObj
+    );
+
+    return occupiedFromBooking.length + occupiedFromCheckIn.length;
+  };
+
+  // Fungsi untuk menghitung jumlah tamu terdaftar berdasarkan tanggal
+  const calculateGuestCount = (date) => {
+    const dateObj = new Date(date); // Filter tamu berdasarkan tanggal
+    const guestsOnDate = tamuList.filter(
+      (tamu) => new Date(tamu.tanggal) <= dateObj
+    );
+
+    return guestsOnDate.length; // Jumlah tamu pada tanggal tertentu
+  };
+
+  // Fungsi untuk format mata uang
+  const formatCurrency = (value) => {
+    if (value >= 1_000_000_000) {
+      return `${(value / 1_000_000_000).toFixed(1)} M`;
+    } else if (value >= 1_000_000) {
+      return `${(value / 1_000_000).toFixed(1)} Jt`;
+    } else if (value >= 1_000) {
+      return `${(value / 1_000).toFixed(1)} Rb`;
+    }
+    return value;
+  };
+
+  // Menghitung total pendapatan dari riwayatList
+  const totalPendapatan = riwayatList.reduce(
+    (sum, riwayat) => sum + riwayat.harga,
+    0
+  );
+
+  // Hitung occupied rooms, available rooms, umlah tamu dan total pendapatan
+  const occupiedRooms = calculateOccupiedRooms(selectedDate);
+  const availableRooms = totalRooms - occupiedRooms;
+  const guestCount = calculateGuestCount(selectedDate);
+
+  // Menggabungkan dan mengurutkan data berdasarkan tanggal update
+  const combinedList = [...bookingList, ...checkInList, ...riwayatList].sort(
+    (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+  );
+
+  // Menampilkan 10 data terbaru
+  const latestReservations = combinedList.slice(0, 5);
 
   return (
     <div
-      className={`fixed left-0 top-16 bottom-10 right-0 md:left-64 pt-14 pb-6 md:pt-10 px-8 overflow-y-auto ${
+      className={`fixed left-0 top-14 bottom-10 right-0 md:left-64 pt-14 pb-6 md:pt-10 px-8 overflow-y-auto ${
         isDarkMode ? "dark" : ""
       }`}
     >
-      <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
-        Selamat Datang di Dashboard Villa Tiara
-      </h2>
+      <div className="md:flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
+          Selamat Datang di Dashboard Villa Tiara Sarangan
+        </h2>
+        <input
+          type="date"
+          min={today}
+          value={selectedDate}
+          onChange={(e) => setSelectedDate(e.target.value)}
+          className="p-2 mt-6 md:mt-0 text-xs border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-yellow-500 focus:outline-none transition duration-300"
+        />
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
         <div className="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg">
           <div className="flex items-center">
@@ -34,10 +130,10 @@ const DashboardAdmin = () => {
             </div>
             <div className="ml-4">
               <h3 className="text-md font-medium text-gray-600 dark:text-gray-300">
-                Kamar Tersedia
+                Kamar Kosong
               </h3>
               <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-                32
+                {availableRooms}
               </p>
             </div>
           </div>
@@ -50,26 +146,10 @@ const DashboardAdmin = () => {
             </div>
             <div className="ml-4">
               <h3 className="text-md font-medium text-gray-600 dark:text-gray-300">
-                Kamar Terpakai
+                Kamar Terisi
               </h3>
               <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-                12
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg">
-          <div className="flex items-center">
-            <div className="w-16 h-16 bg-green-500 text-white flex justify-center items-center rounded-full">
-              <FaUsers size={35} />
-            </div>
-            <div className="ml-4">
-              <h3 className="text-md font-medium text-gray-600 dark:text-gray-300">
-                Tamu Terdaftar
-              </h3>
-              <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-                150
+                {occupiedRooms}
               </p>
             </div>
           </div>
@@ -78,86 +158,94 @@ const DashboardAdmin = () => {
         <div className="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg">
           <div className="flex items-center">
             <div className="w-16 h-16 bg-red-500 text-white flex justify-center items-center rounded-full">
-              <FaStar size={35} />
+              <FaUsers size={35} />
             </div>
             <div className="ml-4">
               <h3 className="text-md font-medium text-gray-600 dark:text-gray-300">
-                Ulasan
+                Tamu Terdaftar
               </h3>
               <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-                120
+                {guestCount} Org
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg">
+          <div className="flex items-center">
+            <div className="w-16 h-16 bg-green-500 text-white flex justify-center items-center rounded-full">
+              <FaDollarSign size={35} />
+            </div>
+            <div className="ml-4">
+              <h3 className="text-md font-medium text-gray-600 dark:text-gray-300">
+                Pendapatan
+              </h3>
+              <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+                {formatCurrency(totalPendapatan)}
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="mt-8 grid grid-cols-3 gap-6">
-        <div className="col-span-2">
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="md:col-span-2">
           <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-4">
             Reservasi Terbaru
           </h3>
           <div className="overflow-x-auto bg-white dark:bg-gray-700 shadow-lg rounded-xl">
-            <table className="min-w-full bg-white dark:bg-gray-700">
+            <table className="min-w-full bg-white dark:bg-gray-800">
               <thead>
                 <tr>
-                  <th className="py-2 px-4 bg-gray-300 dark:bg-gray-800 text-left text-black dark:text-gray-200">
-                    Nama
+                  <th className="py-2 px-4 bg-gray-300 dark:bg-gray-700 text-center text-black dark:text-gray-200">
+                    Nama Tamu
                   </th>
-                  <th className="py-2 px-4 bg-gray-300 dark:bg-gray-800 text-left text-black dark:text-gray-200">
-                    Tipe Kamar
+                  <th className="py-2 px-4 bg-gray-300 dark:bg-gray-700 text-center text-black dark:text-gray-200">
+                    ID Kamar
                   </th>
-                  <th className="py-2 px-4 bg-gray-300 dark:bg-gray-800 text-left text-black dark:text-gray-200">
-                    Tanggal
+                  <th className="py-2 px-4 bg-gray-300 dark:bg-gray-700 text-center text-black dark:text-gray-200">
+                    Check-In
                   </th>
-                  <th className="py-2 px-4 bg-gray-300 dark:bg-gray-800 text-left text-black dark:text-gray-200">
+                  <th className="py-2 px-4 bg-gray-300 dark:bg-gray-700 text-center text-black dark:text-gray-200">
+                    Check-Out
+                  </th>
+                  <th className="py-2 px-4 bg-gray-300 dark:bg-gray-700 text-center text-black dark:text-gray-200">
                     Status
                   </th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-600 dark:text-gray-200">
-                    John Doe
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-600 dark:text-gray-200">
-                    Deluxe
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-600 dark:text-gray-200">
-                    11 Okt 2024
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-600 text-green-500 dark:text-green-400">
-                    Dikonfirmasi
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-600 dark:text-gray-200">
-                    Jane Smith
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-600 dark:text-gray-200">
-                    Suite
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-600 dark:text-gray-200">
-                    10 Okt 2024
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-600 text-yellow-500 dark:text-yellow-400">
-                    Menunggu
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-600 dark:text-gray-200">
-                    Richard Roe
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-600 dark:text-gray-200">
-                    Standard
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-600 dark:text-gray-200">
-                    9 Okt 2024
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-600 text-red-500 dark:text-red-400">
-                    Dibatalkan
-                  </td>
-                </tr>
+                {latestReservations.map((reservation, index) => (
+                  <tr key={index}>
+                    <td className="py-2 px-4 border-b border-gray-300 dark:border-gray-700 dark:text-gray-200">
+                      {reservation.namaTamu}
+                    </td>
+                    <td className="py-2 px-4 border-b border-gray-300 dark:border-gray-700 dark:text-gray-200">
+                      {reservation.idKamar}
+                    </td>
+                    <td className="py-2 px-4 border-b border-gray-300 dark:border-gray-700 dark:text-gray-200">
+                      {new Date(
+                        reservation.tanggalCheckIn
+                      ).toLocaleDateString()}
+                    </td>
+                    <td className="py-2 px-4 border-b border-gray-300 dark:border-gray-700 dark:text-gray-200">
+                      {new Date(
+                        reservation.tanggalCheckOut
+                      ).toLocaleDateString()}
+                    </td>
+                    <td
+                      className={`py-2 px-4 border-b border-gray-300 dark:border-gray-700 ${
+                        reservation.statusBooking === "checkin"
+                          ? "text-green-500 dark:text-green-400"
+                          : reservation.statusBooking === "booking"
+                          ? "text-yellow-500 dark:text-yellow-400"
+                          : "text-red-500 dark:text-red-400"
+                      }`}
+                    >
+                      {reservation.statusBooking}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

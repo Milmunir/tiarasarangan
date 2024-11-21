@@ -8,24 +8,19 @@ import {
   FaSignOutAlt,
   FaChevronDown,
 } from "react-icons/fa";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, forwardRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { DarkModeContext } from "@/app/(contexts)/DarkModeContext";
 
-const SidebarAdmin = () => {
+const SidebarAdmin = forwardRef(({ isOpen }, ref) => {
   const { isDarkMode } = useContext(DarkModeContext);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [currentDate, setCurrentDate] = useState("");
   const [dropdowns, setDropdowns] = useState({
     reservasi: false,
     bukutamu: false,
     laporan: false,
   });
-
-  const handleMenuToggle = () => {
-    setIsMobileMenuOpen((prevState) => !prevState);
-  };
 
   const toggleDropdown = (menu) => {
     setDropdowns((prevState) => ({
@@ -50,9 +45,12 @@ const SidebarAdmin = () => {
     <>
       <aside
         id="sidebar"
+        ref={ref}
         className={`text-white fixed inset-y-0 left-0 w-64 h-screen transition-transform transform ${
-          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 z-20 ${isDarkMode ? "bg-gray-800" : "bg-red-700"}`}
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0 z-20 duration-300 ease-in-out ${
+          isDarkMode ? "bg-gray-800" : "bg-red-700"
+        }`}
       >
         <h1 className="logo text-4xl font-bold py-6 text-center">
           Villa Tiara
@@ -295,25 +293,10 @@ const SidebarAdmin = () => {
           </ul>
         </nav>
       </aside>
-
-      <nav
-        className={`fixed md:hidden p-4 top-0 left-0 right-0 flex justify-between items-center z-50 ${
-          isDarkMode
-            ? "bg-gradient-to-br from-gray-800 to-gray-700 text-gray-400"
-            : "bg-gradient-to-br from-red-700 to-orange-700 text-white"
-        }`}
-      >
-        <div className="logo px-4 text-2xl font-bold">Villa Tiara</div>
-        <button
-          id="menu-toggle"
-          onClick={handleMenuToggle}
-          className="text-2xl p-2 rounded-md focus:outline-none"
-        >
-          ☰
-        </button>
-      </nav>
     </>
   );
-};
+});
+
+SidebarAdmin.displayName = "SidebarAdmin";
 
 export default SidebarAdmin;

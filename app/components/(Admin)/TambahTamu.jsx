@@ -47,7 +47,7 @@ const TambahTamu = () => {
           autoComplete="off"
           onSubmit={handleSubmit}
         >
-          <div className="grid grid-cols-2 gap-4 sm:gap-6">
+          <div className="md:grid md:grid-cols-2 md:gap-4">
             <div className="input-container col-span-1">
               <input
                 type="text"
@@ -64,7 +64,7 @@ const TambahTamu = () => {
                 Nama Lengkap
               </label>
             </div>
-            <div className="relative input-container col-span-1">
+            <div className="relative input-container col-span-1 md:my-0 my-4">
               <input
                 type="tel"
                 id="no_hp"

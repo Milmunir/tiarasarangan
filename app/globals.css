@@ -153,3 +153,15 @@ button:hover {
     top: 0;
   }
 }
+
+/*===============================*/
+
+/* Mengubah warna ikon kalender */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0) sepia(1) saturate(3) hue-rotate(200deg);
+}
+
+/* Warna ikon kalender untuk mode gelap */
+.dark input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(1) sepia(1) saturate(3) hue-rotate(200deg);
+}
