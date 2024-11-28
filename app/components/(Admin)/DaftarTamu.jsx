@@ -8,14 +8,10 @@ import {
 } from "react-icons/fa";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useContext, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { DarkModeContext } from "@/app/(contexts)/DarkModeContext";
+import { useEffect, useState } from "react";
 
 const DaftarTamu = () => {
   const router = useRouter();
-  const { isDarkMode } = useContext(DarkModeContext);
   const [tamuList, setTamuList] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredTamuList, setFilteredTamuList] = useState([]);
@@ -47,28 +43,16 @@ const DaftarTamu = () => {
     const updatedTamuList = tamuList.filter((tamu) => tamu.id !== id);
     setTamuList(updatedTamuList);
     localStorage.setItem("tamuList", JSON.stringify(updatedTamuList));
-    // Menampilkan notifikasi sukses
-    toast.success("Hapus Data Tamu Berhasil!", {
-      position: "top-center",
-      theme: isDarkMode ? "dark" : "light",
-    }); // Mengarahkan ke halaman lain setelah sedikit penundaan
-    setTimeout(() => {
-      setFilteredTamuList(updatedTamuList);
-    }, 1000);
+    alert("Hapus Data Tamu Berhasil!");
+    setFilteredTamuList(updatedTamuList);
   };
 
   // Fungsi untuk clear semua data tamu
   const handleClearData = () => {
     localStorage.removeItem("tamuList");
     setTamuList([]);
-    // Menampilkan notifikasi sukses
-    toast.success("Hapus Seluruh Data Tamu Berhasil!", {
-      position: "top-center",
-      theme: isDarkMode ? "dark" : "light",
-    }); // Mengarahkan ke halaman lain setelah sedikit penundaan
-    setTimeout(() => {
-      setFilteredTamuList([]);
-    }, 1000);
+    alert("Hapus Seluruh Data Tamu Berhasil!");
+    setFilteredTamuList([]);
   };
 
   // Fungsi untuk navigasi ke halaman tambah tamu
@@ -89,7 +73,6 @@ const DaftarTamu = () => {
 
   return (
     <div className="fixed left-0 top-16 bottom-10 right-0 md:left-64 pt-14 pb-6 md:pt-10 px-8 overflow-y-auto">
-      <ToastContainer className="absolute mt-16" />
       <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-gray-200 mb-8 flex items-center justify-center">
         <FaUsers className="text-yellow-500 mr-2" />
         Daftar Tamu
@@ -143,7 +126,7 @@ const DaftarTamu = () => {
                     {indexOfFirstItem + index + 1}
                   </td>
                   <td className="border px-6 py-2 dark:border-gray-700">
-                    {tamu.tanggalWaktu}
+                    {tamu.tanggal} {tamu.waktu}
                   </td>
                   <td className="border px-6 py-2 dark:border-gray-700">
                     {tamu.namaLengkap}
