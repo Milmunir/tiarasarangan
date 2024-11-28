@@ -1,10 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { DarkModeContext } from "@/app/(contexts)/DarkModeContext";
+import { useState, useEffect, useContext, useCallback } from "react";
 import { FaHotel, FaBed, FaDollarSign, FaTags } from "react-icons/fa";
 import MapKamar from "./booking/mapKamar";
 import FormBooking from "./booking/formBooking";
 
+const { isDarkMode } = useContext(DarkModeContext);
 const TambahBooking = (data) => {
   const tipe = ["-", "1 Bed, 2-4 Orang", "2 Bed, 3 Orang", "2 Bed, 4 Orang"];
   const initial = {
@@ -40,6 +44,16 @@ const TambahBooking = (data) => {
     }
   };
 
+    // Menampilkan notifikasi sukses
+    /*
+    toast.success("Booking Berhasil!", {
+      position: "top-center",
+      theme: isDarkMode ? "dark" : "light",
+    }); // Mengarahkan ke halaman lain setelah sedikit penundaan
+    setTimeout(() => {
+      router.push("/DaftarBooking");
+    }, 1000);
+    */
 
   const handleClear = (e) => {
     setSelectedRoom(initial);
@@ -49,6 +63,7 @@ const TambahBooking = (data) => {
 
   return (
     <div className="fixed left-0 top-14 bottom-10 right-0 md:left-64 py-14 md:pt-10 px-8 overflow-y-auto">
+      <ToastContainer className="absolute mt-16" />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white dark:bg-gray-800 py-8 px-12 rounded-xl shadow-lg md:col-span-2">
           <h2 className="text-2xl font-bold mb-8 text-center flex items-center justify-center text-gray-800 dark:text-gray-200">

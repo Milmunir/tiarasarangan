@@ -11,10 +11,14 @@ import {
 } from "react-icons/fa";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useContext, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { DarkModeContext } from "@/app/(contexts)/DarkModeContext";
 
 const DaftarCheckIn = () => {
   const router = useRouter();
+  const { isDarkMode } = useContext(DarkModeContext);
   const [checkInList, setCheckInList] = useState([]);
   const [riwayatList, setRiwayatList] = useState([]);
   const [invoiceData, setInvoiceData] = useState(null);
@@ -55,6 +59,7 @@ const DaftarCheckIn = () => {
     // Buat objek dengan status yang diperbarui
     const updatedCheckInStatus = {
       ...checkInToCheckOut,
+      id: Date.now(),
       statusBooking: "checkout",
       statusKamar: "kosong",
     };
@@ -93,9 +98,14 @@ const DaftarCheckIn = () => {
     );
     localStorage.setItem("checkInList", JSON.stringify(updatedCheckInList));
     localStorage.setItem("riwayatList", JSON.stringify(newRiwayatList));
-
-    alert("Check-Out Berhasil!");
-    router.push("/DaftarRiwayat");
+    // Menampilkan notifikasi sukses
+    toast.success("Check-Out Berhasil!", {
+      position: "top-center",
+      theme: isDarkMode ? "dark" : "light",
+    }); // Mengarahkan ke halaman lain setelah sedikit penundaan
+    setTimeout(() => {
+      router.push("/DaftarRiwayat");
+    }, 1000);
   };
 
   // Fungsi untuk melihat invoice
@@ -130,6 +140,7 @@ const DaftarCheckIn = () => {
 
   return (
     <div className="fixed left-0 top-16 bottom-10 right-0 md:left-64 pt-14 pb-6 md:pt-10 px-8 overflow-y-auto">
+      <ToastContainer className="absolute mt-16" />
       <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-gray-200 mb-8 flex items-center justify-center">
         <FaCreditCard className="text-yellow-500 mr-2" />
         CheckOut Reservasi

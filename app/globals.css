@@ -62,7 +62,15 @@ body {
   font-size: 0.875rem;
   color: #f59e0b;
   background-color: white;
-  padding: 0px 7px 0px 7px;
+  padding: 2px 8px 2px 8px;
+}
+
+.dark .input-container input:focus ~ label,
+.dark .input-container textarea:focus ~ label,
+.dark .input-container input:not(:placeholder-shown) ~ label,
+.dark .input-container select:focus ~ label {
+  color: white;
+  background-color: #1f2937;
 }
 
 /*===============================================*/

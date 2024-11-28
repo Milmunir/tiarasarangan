@@ -98,7 +98,7 @@ const DashboardAdmin = () => {
 
   // Menggabungkan dan mengurutkan data berdasarkan tanggal update
   const combinedList = [...bookingList, ...checkInList, ...riwayatList].sort(
-    (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+    (a, b) => new Date(b.id) - new Date(a.id)
   );
 
   // Menampilkan 10 data terbaru
