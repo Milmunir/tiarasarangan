@@ -350,10 +350,10 @@ const DaftarBooking = (data) => {
                   </td>
                   <td className="border px-4 py-2">{booking.total}</td>
                   <td className="border px-4 py-2">
-                    <button className="bg-green-600 hover:bg-green-500 text-white px-2 mx-1 py-1 rounded-md" onClick={() => handleCheckInClick(booking.id)}>
+                    <button className="bg-green-600 hover:bg-green-500 text-white px-2 mx-1 py-1 rounded-md" onClick={() => checkin((booking.id))}>
                       <FaSignInAlt />
                     </button>
-                    <button className="bg-blue-500 text-white px-2 py-1 rounded-md mx-1" onClick={() => handleEditClick(booking.id)} >
+                    <button className="bg-blue-500 text-white px-2 py-1 rounded-md mx-1" onClick={() => openUpdateWindow(booking.id)} >
                       <FaEdit />
                     </button>
                     <button onClick={() => handleDelete(booking.id)} className="bg-red-500 hover:bg-red-600 text-white px-2 mx-1 py-1 rounded-md" >
