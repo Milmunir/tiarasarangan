@@ -4,25 +4,10 @@ import { useEffect, useRef } from "react";
 
 export default function MapKamar(data) {
 
-  const today = new Date().toISOString().split('T')[0];
   const booked = new Map(data.booked.map(item => [item.id_ruangan, item]));
 
   return (
     <>
-      <div className="flex items-center justify-between mb-4">
-        <Link href="/Dashboard" className="flex items-center text-sm font-semibold text-gray-600 hover:text-yellow-500 transition" >
-          <FaArrowLeft className="text-yellow-500 mr-2" />
-          Kembali
-        </Link>
-        <input
-          type="date"
-          id="selectedDate"
-          className="text-sm px-2 py-1 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-yellow-500 focus:outline-none transition duration-300 ease-in-out"
-          defaultValue={today}
-          onChange={(e) => data.changeTanggal(e.target.value)}
-          style={{ width: "115px" }}
-        />
-      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <h2 className="logo bg-gradient-to-br from-orange-500 to-red-500 text-white text-md rounded-lg p-2 mb-4 text-center font-bold">

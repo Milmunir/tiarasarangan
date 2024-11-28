@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { FaHotel, FaBed, FaDollarSign, FaTags } from "react-icons/fa";
+import { FaHotel, FaBed, FaDollarSign, FaTags, FaArrowLeft } from "react-icons/fa";
 import MapKamar from "./booking/mapKamar";
 import FormBooking from "./booking/formBooking";
+import Link from "next/link";
 
 const TambahBooking = (data) => {
   const tipe = ["-", "1 Bed, 2-4 Orang", "2 Bed, 3 Orang", "2 Bed, 4 Orang"];
@@ -12,11 +13,11 @@ const TambahBooking = (data) => {
     tipe: 0,
     harga: 0,
   }
-  const todayDate = new Date();
+  const today = new Date().toISOString().split('T')[0];
   const [booked, setbooked] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState("-");
-  const [selectedDate, setSelectedDate] = useState(todayDate);
+  const [selectedDate, setSelectedDate] = useState(today);
   // Memperbarui daftar kamar setiap kali tanggal yang dipilih berubah
   useEffect(() => {
     console.log('hehehe - ');
@@ -27,13 +28,13 @@ const TambahBooking = (data) => {
       document.getElementsByName("id_ruangan").forEach((input) => (input.checked = false));
     }
     newdata();
-  }, [selectedDate, data]);
-  
+  }, [selectedDate]);
+
   // Fungsi untuk menangani klik pada tombol kamar
   const handleRoomClick = (kamar) => {
     if (kamar) {
       const selected = [];
-      document.getElementsByName("id_ruangan").forEach((input) => (input.checked && selected.push(data.kamar[parseInt(input.value)-1])));
+      document.getElementsByName("id_ruangan").forEach((input) => (input.checked && selected.push(data.kamar[parseInt(input.value) - 1])));
       console.log(selected);
       setSelectedRoom(selected);
       setSelectedStatus('-');
@@ -54,7 +55,21 @@ const TambahBooking = (data) => {
           <h2 className="text-2xl font-bold mb-8 text-center flex items-center justify-center text-gray-800 dark:text-gray-200">
             <FaHotel className="text-yellow-500 mr-2" /> Tambah Booking
           </h2>
-          <MapKamar room={data.kamar} changeTanggal={setSelectedDate} booked={booked} clicked={handleRoomClick} />
+          <div className="flex items-center justify-between mb-4">
+            <Link href="/Dashboard" className="flex items-center text-sm font-semibold text-gray-600 hover:text-yellow-500 transition" >
+              <FaArrowLeft className="text-yellow-500 mr-2" />
+              Kembali
+            </Link>
+            <input
+              type="date"
+              id="selectedDate"
+              className="text-sm px-2 py-1 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-yellow-500 focus:outline-none transition duration-300 ease-in-out"
+              defaultValue={today}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              style={{ width: "115px" }}
+            />
+          </div>
+          <MapKamar room={data.kamar} booked={booked} clicked={handleRoomClick} />
           <div className="p-4 bg-gray-200 rounded-xl mt-4 shadow-lg border-2 border-gray-400">
             <div className="grid grid-cols-1 md:grid-cols-11 gap-2">
               <div className="flex p-2 md:col-span-4 items-center shadow-md justify-start rounded-lg bg-white dark:bg-gray-800">

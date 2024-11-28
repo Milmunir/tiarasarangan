@@ -3,17 +3,19 @@ import { FaSave, FaTrash } from "react-icons/fa";
 import { newReservation } from "@/app/prisma/reservation";
 
 export default function FormBooking(data) {
+    const day = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
     const today = new Date().toISOString().split('T')[0];
     const resDate = useRef({})
     const [totalHarga, setTotalHarga] = useState(0);
     const [promoNow, setpromoNow] = useState(0);
+    const [isPromoValid, setisPromoValid] = useState(true);
     const [HargaAsli, setHargaAsli] = useState(0);
     const [checkIn, setcheckIn] = useState(resDate.current.checkIn);
     const [state, action] = useActionState(newReservation, undefined);
 
     const calculateTotalHarga = () => {
         if (resDate.current.checkIn && resDate.current.checkOut) {
-            console.log(promoNow);
+            // console.log(promoNow);
             if (data.room.length == 0) {
                 return
             }
@@ -22,19 +24,33 @@ export default function FormBooking(data) {
             const timeDifference = resDate.current.checkOut - resDate.current.checkIn;
             const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
             const total = daysDifference * HargaAsli;
-            const hargaAkhir = promoNow? promoHandler(total, promoNow) : total;
-            setHargaAsli(hargaAkhir);
-            setTotalHarga(total);
+            const hargaAkhir = promoNow ? promoHandler(total, promoNow) : total;
+            setHargaAsli(total);
+            setTotalHarga(hargaAkhir);
         };
     };
 
     function promoHandler(harga, promo) {
-        if (promo.amount != null) {
-            return harga-promo.amount;
+        // console.log(promoNow.day[day[resDate.current.checkIn.getDay()]]);
+        console.log(promo);
+        if (promo.mulai != null && promo.sampai != null) {
+            console.log('tanggal false');
+            if (!(promo.mulai.getTime() <= resDate.current.checkIn.getTime() && promo.sampai.getTime() >= resDate.current.checkIn.getTime())) {
+                setisPromoValid(false)
+                return harga
+            }
         }
-        if (promo.percent != null) {
-            return harga-(harga*promo.percent/100);
+        if (promo.day[day[resDate.current.checkIn.getDay()]]) {
+            setisPromoValid(true)
+            if (promo.amount != null) {
+                return harga - promo.amount;
+            }
+            if (promo.percent != null) {
+                return harga - (harga * promo.percent / 100);
+            }
         }
+        setisPromoValid(false)
+        return harga
     };
 
     function checkInChange(date) {
@@ -55,6 +71,10 @@ export default function FormBooking(data) {
     }, [data.room, promoNow]);
     
     useEffect(() => {
+        document.getElementById("bookingForm").reset();
+    }, [state]);
+    
+    useEffect(() => {
         console.log(HargaAsli);
         setTotalHarga(HargaAsli)
     }, [HargaAsli]);
@@ -63,17 +83,7 @@ export default function FormBooking(data) {
         <div className="bg-white py-8 px-12 rounded-xl shadow-lg w-full max-w-3xl md:col-span-1">
             <form id="bookingForm" className="space-y-4 text-sm" action={action}>
                 
-                {/* <div>
-                    <h2 className="text-xl font-semibold mb-2 text-center">
-                        <span className="font-bold text-orange-600">{data.room.nomor ? data.room.nomor : 'PILIH KAMAR'}</span>
-                    </h2>
-                    <h2 className="text-md font-semibold mb-4 text-center">
-                        <span className="font-bold">{data.tipe === '-' ? '' : data.tipe}</span>
-                    </h2>
-                </div> */}
-
-                {/* Nama Tamu */}
-                {/* <input type="text" id="id_ruangan" defaultValue={data.room.id} name="id_ruangan" className="w-full px-4 py-2 border rounded-md hidden" /> */}
+                {state?.errors?.id_ruangan && <div className="text-xs text-red-700" >{state.errors.id_ruangan}</div>}
                 <div className="mb-4">
                     <label htmlFor="nama" className="block text-gray-700 font-medium" >Nama Tamu:</label>
                     <input type="text" id="nama" name="nama" className="w-full px-4 py-2 border rounded-md" required placeholder="Masukkan Nama Lengkap" />
@@ -103,13 +113,13 @@ export default function FormBooking(data) {
                 <div className="mb-4">
                     <label htmlFor="asli" className="block text-gray-700 font-medium" >Harga Awal (Rp):</label>
                     <input type="number" value={HargaAsli} name="asli" id="asli" min="0" readOnly className="w-full px-4 py-2 border rounded-md" placeholder="Harga Asli Sebelum Promo" required />
-                    {state?.errors?.harga && <div className="text-xs text-red-700" >{state.errors.harga}</div>}
+                    {state?.errors?.asli && <div className="text-xs text-red-700" >{state.errors.asli}</div>}
                 </div>
-                
+
                 <div className="mb-4">
                     <label htmlFor="total" className="block text-gray-700 font-medium" >Total Harga (Rp):</label>
                     <input type="number" value={totalHarga} onChange={(e) => setTotalHarga(e.target.value)} name="total" id="total" min="0" className="w-full px-4 py-2 border rounded-md" placeholder="Masukkan Jumlah Harga" required />
-                    {state?.errors?.harga && <div className="text-xs text-red-700" >{state.errors.harga}</div>}
+                    {state?.errors?.total && <div className="text-xs text-red-700" >{state.errors.total}</div>}
                 </div>
 
                 <div className="mb-4">
@@ -120,12 +130,13 @@ export default function FormBooking(data) {
 
                 <div className="mb-4">
                     <label htmlFor="promo" className="block text-gray-700 font-medium" >promo</label>
-                    <select name="promo" id="promo" className="w-full px-4 py-2 border rounded-md" placeholder="Prommo yang dipakai" onChange={(e)=>setpromoNow(data.promo[e.target.value-1])}>
+                    <select name="promo" id="promo" className="w-full px-4 py-2 border rounded-md" placeholder="Prommo yang dipakai" onChange={(e) => setpromoNow(data.promo[e.target.value - 1])}>
                         <option value='0'>--kosong--</option>
-                        {data.promo.map((promo)=>(
+                        {data.promo.map((promo) => (
                             <option key={promo.id} value={promo.id}>{promo.code}</option>
                         ))}
                     </select>
+                    {state?.errors?.promo || !isPromoValid && <div className="text-xs text-red-700" >Promo tidak berlaku untuk tanggal tersebut</div>}
                 </div>
 
                 {/* Tombol Submit */}
@@ -140,7 +151,6 @@ export default function FormBooking(data) {
                     </button>
                 </div>
             </form>
-            {state && console.log(state)}
         </div>
     )
 }

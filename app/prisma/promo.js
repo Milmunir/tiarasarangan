@@ -9,6 +9,8 @@ export async function getPromo() {
             code: true,
             amount: true,
             percent: true,
+            mulai: true,
+            sampai: true,
             day: true,
         }
     });

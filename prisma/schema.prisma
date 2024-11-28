@@ -45,7 +45,7 @@ model promo {
   code       String    @db.VarChar(255)
   amount     Int?
   percent    Int?
-  day        Json?     @default("{ \"monday\": true, \"tuesday\": true, \"wednesday\": true, \"thursday\": true, \"friday\": true, \"saturday\": false, \"sunday\": false }") @db.Json
+  day        Json?     @db.Json @default("{\"monday\":true,\"tuesday\":true,\"wednesday\":true,\"thursday\":true,\"friday\":true,\"saturday\":true,\"sunday\":true}")
   mulai      DateTime? @db.Timestamp(0)
   sampai     DateTime? @db.Timestamp(0)
   created_at DateTime? @default(now())
@@ -83,7 +83,7 @@ model reservations {
   dp         Int?
   asli       Int?
   total      Int?
-  promo      String?
+  promo      Int?
   masuk      DateTime  @db.Timestamp(0)
   keluar     DateTime  @db.Timestamp(0)
   created_at DateTime? @default(now())
@@ -91,3 +91,4 @@ model reservations {
   deleted_at DateTime? @db.Timestamp(0)
   rooms      rooms     @relation(fields: [id_ruangan], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "reservations_id_ruangan_foreign")
 }
+

@@ -37,7 +37,7 @@ async function main() {
   const promo = await prisma.promo.createMany({
     data: [
       {
-        id: 1,
+        // id: 1,
         code: 'LGNGNGR',
         day: {
           monday: true,
@@ -50,24 +50,58 @@ async function main() {
         },
         percent: 20
       },
-      { 
-        id: 2,
-        code: 'LGNGW', 
-        day:{
+      {
+        // id: 2,
+        code: 'LGNGW',
+        day: {
           monday: false,
           tuesday: false,
           wednesday: false,
           thursday: false,
           friday: false,
           saturday: true,
-          sunday: false,
+          sunday: true,
         },
         amount: 100000,
-      }
+      },
+      {
+        // id: 3,
+        code: 'PRHBLN',
+        mulai: new Date("2024-11-01 00:00:00.000"),
+        sampai: new Date("2024-11-15 23:59:59.000"),
+        amount: 100000,
+      },
+      {
+        // id: 4,
+        code: 'FLBLN',
+        mulai: new Date("2024-11-01 00:00:00.000"),
+        sampai: new Date("2024-11-30 23:59:59.000"),
+        amount: 100000,
+      },
     ]
   })
   console.log(promo);
-  
+
+  // const arr = await prisma.arr.createMany({
+  //   data: [
+  //     {
+  //       id: 1,
+  //       arr: [1, 2, 3, 4, 5]
+  //     },
+  //     {
+  //       id: 2,
+  //       arr: [6, 7, 8, 9, 0]
+  //     },
+  //     {
+  //       id: 3,
+  //       arr: [1, 4, 2, 5, 8]
+  //     },
+  //     {
+  //       id: 4,
+  //       arr: [1, 4, 6, 2, 7]
+  //     },
+  //   ]
+  // })
 }
 
 main()
