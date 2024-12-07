@@ -34,4 +34,27 @@ export async function getRoomByDate(date) {
     return data;
 }
 
+export async function getRoomExceptInv(date, invoice) {
+    console.log(invoice);
+    const data = await prisma.reservations.findMany({
+        where: {
+            masuk: {
+                lte: date
+            },
+            keluar: {
+                gte: date
+            },
+            NOT: {
+                noinvoice: invoice
+            }
+        },
+        select:{
+            id : true,
+            id_ruangan : true,
+            status : true
+        }
+    })
+    return data;
+}
+
 

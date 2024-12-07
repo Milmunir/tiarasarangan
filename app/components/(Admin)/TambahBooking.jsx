@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useActionState } from "react";
 import { FaHotel, FaBed, FaDollarSign, FaTags, FaArrowLeft } from "react-icons/fa";
 import MapKamar from "./booking/mapKamar";
 import FormBooking from "./booking/formBooking";
 import Link from "next/link";
+import { newReservation } from "@/app/prisma/reservation";
 
 const TambahBooking = (data) => {
-  const tipe = ["-", "1 Bed, 2-4 Orang", "2 Bed, 3 Orang", "2 Bed, 4 Orang"];
   const initial = {
     id: 0,
     tipe: 0,
@@ -16,36 +16,34 @@ const TambahBooking = (data) => {
   const today = new Date().toISOString().split('T')[0];
   const [booked, setbooked] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState([]);
-  const [selectedStatus, setSelectedStatus] = useState("-");
   const [selectedDate, setSelectedDate] = useState(today);
-  // Memperbarui daftar kamar setiap kali tanggal yang dipilih berubah
+  const [state, action] = useActionState(newReservation, undefined);
+
   useEffect(() => {
-    console.log('hehehe - ');
+    //console.log('hehehe - ');
     const newdata = async () => {
       const updatedData = await data.getByDate(selectedDate);
-      console.log(updatedData);
+      //console.log(updatedData);
       setbooked(updatedData);
       document.getElementsByName("id_ruangan").forEach((input) => (input.checked = false));
     }
     newdata();
   }, [selectedDate]);
 
-  // Fungsi untuk menangani klik pada tombol kamar
   const handleRoomClick = (kamar) => {
+    //console.log("called");
     if (kamar) {
+      //console.log("used");
       const selected = [];
       document.getElementsByName("id_ruangan").forEach((input) => (input.checked && selected.push(data.kamar[parseInt(input.value) - 1])));
-      console.log(selected);
+      //console.log(selected);
       setSelectedRoom(selected);
-      setSelectedStatus('-');
     }
   };
 
-
   const handleClear = (e) => {
-    setSelectedRoom(initial);
-    setSelectedStatus("-");
-    document.getElementById("bookingForm").reset();
+    document.getElementsByName("id_ruangan").forEach((input) => (input.checked = false));
+    setSelectedRoom([]);
   };
 
   return (
@@ -70,47 +68,13 @@ const TambahBooking = (data) => {
             />
           </div>
           <MapKamar room={data.kamar} booked={booked} clicked={handleRoomClick} />
-          <div className="p-4 bg-gray-200 rounded-xl mt-4 shadow-lg border-2 border-gray-400">
-            <div className="grid grid-cols-1 md:grid-cols-11 gap-2">
-              <div className="flex p-2 md:col-span-4 items-center shadow-md justify-start rounded-lg bg-white dark:bg-gray-800">
-                <FaBed className="text-yellow-600 text-xl mx-4" />
-                <div>
-                  <h4 className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-                    Jumlah Bed:
-                  </h4>
-                  <p className="text-gray-800 text-md font-bold">
-                    {tipe[selectedRoom.tipe]}
-                  </p>
-                </div>
-              </div>
-              <div className="flex p-2 md:col-span-3 items-center shadow-md justify-start rounded-lg bg-white dark:bg-gray-800">
-                <FaTags className="text-yellow-600 text-xl mx-4" />
-                <div>
-                  <h4 className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-                    Status:
-                  </h4>
-                  <p className={`text-gray-800 text-md font-bold ${selectedStatus === "kosong" ? "text-green-600" : "text-red-600"}`}>
-                    {selectedStatus}
-                  </p>
-                </div>
-              </div>
-              <div className="flex p-2 md:col-span-4 items-center shadow-md justify-start rounded-lg bg-white dark:bg-gray-800">
-                <FaDollarSign className="text-yellow-600 text-xl mx-4" />
-                <div>
-                  <h4 className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-                    Harga per Malam :
-                  </h4>
-                  <p className="text-gray-800 text-md font-bold">
-                    Rp. {selectedRoom.harga}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* form booking */}
-        <FormBooking room={selectedRoom} tipe={tipe[selectedRoom.tipe]} clear={handleClear} promo={data.promo} />
+        <div className="bg-white py-8 px-12 rounded-xl shadow-lg w-full max-w-3xl md:col-span-1">
+          <FormBooking room={selectedRoom} clear={handleClear} promo={data.promo} state={state} action={action} />
+        </div>
+
       </div>
     </div>
   );

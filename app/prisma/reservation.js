@@ -3,14 +3,19 @@
 import { redirect } from "next/navigation";
 import { prisma } from "./conn";
 import { z } from "zod";
+import { promoValidator } from "../helper/promo";
+import { revalidatePath } from "next/cache";
 
 export async function getReservation() {
     const reservation = await prisma.reservations.findMany({
-        distinct: ['noinvoice'],
         orderBy: [
             { masuk: 'asc' },
+            { noinvoice: 'asc' },
             { id_ruangan: 'asc' }
         ],
+        where: {
+            status: "booked"
+        },
         include: {
             rooms: {
                 select: {
@@ -44,24 +49,28 @@ export async function getByDate(date) {
 }
 
 export async function checkIn(noinvoice) {
-    const result = await prisma.reservations.update({
+    const checkin = new Date();
+    const result = await prisma.reservations.updateMany({
         where: {
             noinvoice: noinvoice
         },
         data: {
-            status: "checkIn"
+            status: "checkIn",
+            masuk: checkin
         }
     })
-    return result;
+    return redirect("/DaftarBooking");
 }
 
 export async function checkOut(noinvoice) {
-    const result = await prisma.reservations.update({
+    const checkout = new Date();
+    const result = await prisma.reservations.updateMany({
         where: {
             noinvoice: noinvoice
         },
         data: {
-            status: "checkOut"
+            status: "checkOut",
+            keluar: checkout
         }
     })
     return result;
@@ -69,9 +78,10 @@ export async function checkOut(noinvoice) {
 
 export async function newReservation(state, formdata) {
     // console.log(formdata);
-    const day = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
+    // const day = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
+    const isupdate = formdata.get('noinvoice') ? true : false;
     let data = {
-        noinvoice: Date.now() + '' + formdata.get('id_ruangan'),
+        noinvoice: isupdate ? formdata.get('noinvoice') : Date.now() + '' + formdata.get('id_ruangan'),
         id_ruangan: formdata.getAll('id_ruangan').map(Number),
         nama: formdata.get('nama'),
         hp: formdata.get('hp'),
@@ -120,38 +130,27 @@ export async function newReservation(state, formdata) {
         errors.asli = "Harga tidak valid";
     }
 
-    //validasi promo
-    let total = 0;
-    if (data.promo != '0') {
-        const promo = data.promo != '0' ? await prisma.promo.findFirst({ where: { id: data.promo } }) : null;
-        if (promo.mulai != null && promo.sampai != null) {
-            if (!(promo.mulai.getTime() <= data.masuk.getTime() && promo.sampai.getTime() >= data.masuk.getTime())) {
-                console.log('tanggal false');
-                errors.promo = "Promo Tidak Valid"
-            }
-        }
-        if (promo.day[day[data.masuk.getDay()]]) {
-            if (promo.amount != null) {
-                total = hargaAsli - promo.amount;
-            }
-            if (promo.percent != null) {
-                total = hargaAsli - (hargaAsli * promo.percent / 100);
-            }
-        }
-        else {
-            errors.promo = "Promo Tidak Valid"
-        }
-    }
-    else {
-        total = hargaAsli;
+    const promo = data.promo != '0' ? await prisma.promo.findFirst({ where: { id: data.promo } }) : null;
+    const validatedPromo = promoValidator(hargaAsli, promo, data.masuk)
+
+    // validasi promo
+    if (!validatedPromo.isTrue) {
+        errors.promo = "Promo Tidak Valid"
     }
 
     //cek jika Nego
-    if (data.total != total) {
+    if (data.total != validatedPromo.total) {
         data.promo = 0; // 0 => nego 
     }
 
-    // return formdata.getAll('id_ruangan');
+    // return {isupdate, data};
+
+    //jika update hapus data
+    if (isupdate) {
+        const existReservasi = await prisma.reservations.findFirst({ where: { noinvoice: data.noinvoice } })
+        data.created_at = existReservasi.created_at
+        await prisma.reservations.deleteMany({ where: { noinvoice: data.noinvoice } })
+    }
 
     //validasi kamar
     const isexist = await prisma.reservations.findFirst({
@@ -196,9 +195,7 @@ export async function newReservation(state, formdata) {
             let reservasi = { ...data };
             reservasi.id_ruangan = data.id_ruangan[i];
             console.log(data.id_ruangan + " - " + i);
-            const hasil = await prisma.reservations.create({
-                data: reservasi
-            })
+            const hasil = await prisma.reservations.create({ data: reservasi })
             result.push(hasil)
         }
         if (Object.values(errors).every(value => value === undefined)) {
