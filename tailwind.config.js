@@ -13,14 +13,18 @@ module.exports = {
         foreground: "var(--foreground)",
       },
       borderRadius: {
+        "4xl": "2rem",
         "5xl": "3rem",
         "6xl": "4rem",
       },
       height: {
         448: "22rem",
-        768: "48rem",
+        768: "50rem",
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require("tailwind-scrollbar-hide"),
+    require("tailwindcss-textshadow"),
+  ],
 };

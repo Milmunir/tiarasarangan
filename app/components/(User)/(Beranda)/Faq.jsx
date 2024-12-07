@@ -11,10 +11,10 @@ const FaqComponent = () => {
 
   return (
     <div className="bg-white">
-      <div className="container py-16 mx-auto px-20">
+      <div className="container py-16 mx-auto px-10 md:px-20">
         <section className="text-center mb-4">
-          <h1 className="text-3xl md:text-4xl font-bold">
-            Pertanyaan Sering Diajukan
+          <h1 className="text-3xl md:text-5xl font-extrabold">
+            Pertanyaan <span className="text-red-600">Sering Diajukan</span>
           </h1>
           <p className="text-gray-700 text-md py-6">
             Temukan jawaban atas pertanyaan yang sering diajukan tentang Villa
@@ -22,7 +22,7 @@ const FaqComponent = () => {
           </p>
         </section>
         <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="border border-gray-200 rounded-lg">
+          <div className="border border-gray-300 rounded-lg">
             <button
               className="w-full text-left p-4 font-semibold flex justify-between items-center focus:outline-none"
               onClick={() => toggleAccordion(1)}
@@ -37,21 +37,23 @@ const FaqComponent = () => {
             {activeIndex === 1 && (
               <div className="p-4">
                 <p className="text-gray-600">
-                  Villa Tiara memiliki fasilitas terbaik seperti: Restoran,
-                  Resepsionis 24 Jam, Parkir, WiFi. (Beberapa fasilitas lain
-                  mungkin memerlukan biaya tambahan)
+                  Villa Tiara Sarangan menyediakan berbagai fasilitas termasuk
+                  resepsionis 24 jam, area parkir luas, restoran dengan menu
+                  lezat, Café Tiara, meeting room yang modern, serta akses Wi-Fi
+                  gratis di seluruh area. Dengan fasilitas lengkap ini,
+                  pengunjung dijamin merasa nyaman dan puas selama menginap.
                 </p>
               </div>
             )}
           </div>
 
-          <div className="border border-gray-200 rounded-lg">
+          <div className="border border-gray-300 rounded-lg">
             <button
               className="w-full text-left p-4 font-semibold flex justify-between items-center focus:outline-none"
               onClick={() => toggleAccordion(2)}
             >
               <span>
-                Kapan waktu check-in & check out di Villa Tiara Sarangan?
+                Kapan waktu check-in & check-out di Villa Tiara Sarangan?
               </span>
               <span className="toggle-icon" id="toggle-icon-2">
                 {activeIndex === 2 ? "-" : "+"}
@@ -60,21 +62,21 @@ const FaqComponent = () => {
             {activeIndex === 2 && (
               <div className="p-4">
                 <p className="text-gray-600">
-                  Waktu untuk check-in di OYO 1342 Villa Tiara adalah mulai dari
-                  pukul Dari 14:00 sedangkan waktu check-out paling lambat pukul
-                  Sebelum 12:00
+                  Waktu check-in di Villa Tiara Sarangan dimulai pukul 14.00
+                  WIB. Sementara itu, waktu check-out adalah sebelum pukul 12.00
+                  WIB.
                 </p>
               </div>
             )}
           </div>
 
-          <div className="border border-gray-200 rounded-lg">
+          <div className="border border-gray-300 rounded-lg">
             <button
               className="w-full text-left p-4 font-semibold flex justify-between items-center focus:outline-none"
               onClick={() => toggleAccordion(3)}
             >
               <span>
-                Fasilitas apa saja yang tersedia di Villa Tiara Sarangan?
+                Tempat wisata apa saja yang dekat dengan Villa Tiara Sarangan?
               </span>
               <span className="toggle-icon" id="toggle-icon-3">
                 {activeIndex === 3 ? "-" : "+"}
@@ -83,21 +85,26 @@ const FaqComponent = () => {
             {activeIndex === 3 && (
               <div className="p-4">
                 <p className="text-gray-600">
-                  Villa Tiara memiliki fasilitas terbaik seperti: Restoran,
-                  Resepsionis 24 Jam, Parkir, WiFi. (Beberapa fasilitas lain
-                  mungkin memerlukan biaya tambahan)
+                  Villa Tiara Sarangan memiliki lokasi yang strategis dengan
+                  berbagai tempat wisata menarik di sekitarnya. Seperti Telaga
+                  Sarangan, Mojosemi Forest Park, Air Terjun Ngadiloyo, dan
+                  Kebun Strawberry Sarangan. Hebatnya lagi, Telaga Sarangan
+                  hanya berjarak sekitar 10 meter dari villa, sehingga
+                  pengunjung hanya tinggal berjalan kaki untuk ke Telaga
+                  Sarangan.
                 </p>
               </div>
             )}
           </div>
 
-          <div className="border border-gray-200 rounded-lg">
+          <div className="border border-gray-300 rounded-lg">
             <button
               className="w-full text-left p-4 font-semibold flex justify-between items-center focus:outline-none"
               onClick={() => toggleAccordion(4)}
             >
               <span>
-                Kapan waktu check-in & check out di Villa Tiara Sarangan?
+                Berapa biaya untuk sewa kamar per malamnya di Villa Tiara
+                Sarangan?
               </span>
               <span className="toggle-icon" id="toggle-icon-4">
                 {activeIndex === 4 ? "-" : "+"}
@@ -106,9 +113,19 @@ const FaqComponent = () => {
             {activeIndex === 4 && (
               <div className="p-4">
                 <p className="text-gray-600">
-                  Waktu untuk check-in di OYO 1342 Villa Tiara adalah mulai dari
-                  pukul Dari 14:00 sedangkan waktu check-out paling lambat pukul
-                  Sebelum 12:00
+                  Untuk informasi harga kamar di Villa Tiara Sarangan, Anda
+                  dapat langsung menghubungi kontak resmi melalui WhatsApp Villa
+                  Tiara Sarangan di
+                  <a
+                    href="https://wa.me/6281335623403"
+                    className="whatsapp-logo"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    +6281335623403
+                  </a>
+                  . Kami menyediakan berbagai tipe kamar dengan harga terjangkau
+                  yang cocok untuk keluarga, pasangan, maupun rombongan.
                 </p>
               </div>
             )}

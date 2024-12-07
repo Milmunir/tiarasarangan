@@ -1,12 +1,12 @@
 import React from "react";
-import UserTemplate from "@/app/(templates)/(User)/UserTemplate";
-import ArtikelComponent from "@/app/components/(User)/Artikel";
+import UserTemplate2 from "@/app/(templates)/(User)/UserTemplate2";
+import ArtikelAllComponent from "@/app/components/(User)/(Artikel)/ArtikelAll";
 
 const ArtikelPage = () => {
   return (
-    <UserTemplate>
-      <ArtikelComponent />
-    </UserTemplate>
+    <UserTemplate2>
+      <ArtikelAllComponent />
+    </UserTemplate2>
   );
 };
 

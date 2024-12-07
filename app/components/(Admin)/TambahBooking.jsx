@@ -5,6 +5,10 @@ import { FaHotel, FaBed, FaDollarSign, FaTags, FaArrowLeft } from "react-icons/f
 import MapKamar from "./booking/mapKamar";
 import FormBooking from "./booking/formBooking";
 import Link from "next/link";
+import { DarkModeContext } from "@/app/(contexts)/DarkModeContext";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+const MySwal = withReactContent(Swal);
 import { newReservation } from "@/app/prisma/reservation";
 
 const TambahBooking = (data) => {
@@ -40,7 +44,41 @@ const TambahBooking = (data) => {
       setSelectedRoom(selected);
     }
   };
-
+/*
+//safe alert
+    MySwal.fire({
+      title: "Apakah Anda yakin?",
+      text: "Pastikan data yang Anda masukkan sudah benar.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: isDarkMode ? "#f59e0b" : "#f59e0b",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, simpan!",
+      cancelButtonText: "Batal",
+      background: isDarkMode ? "#333" : "#fff",
+      color: isDarkMode ? "#fff" : "#000",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        MySwal.fire({
+          title: "Booking Berhasil!",
+          text: "Data booking berhasil disimpan.",
+          icon: "success",
+          confirmButtonText: "OK",
+          background: isDarkMode ? "#333" : "#fff",
+          color: isDarkMode ? "#fff" : "#000",
+          confirmButtonColor: isDarkMode ? "#f59e0b" : "#f59e0b",
+        }).then(() => {
+          const updatedBookingList = [...bookingList, newBooking];
+          setBookingList(updatedBookingList);
+          localStorage.setItem(
+            "bookingList",
+            JSON.stringify(updatedBookingList)
+          );
+          router.push("/DaftarBooking"); // Mengarahkan ke halaman lain setelah notifikasi
+        });
+      }
+    });
+  */
   const handleClear = (e) => {
     document.getElementsByName("id_ruangan").forEach((input) => (input.checked = false));
     setSelectedRoom([]);

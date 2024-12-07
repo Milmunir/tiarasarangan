@@ -11,7 +11,12 @@ import {
 } from "react-icons/fa";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useContext, useState } from "react";
+import { DarkModeContext } from "@/app/(contexts)/DarkModeContext";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
+const MySwal = withReactContent(Swal);
 
 const DaftarCheckIn = () => {
   const router = useRouter();
@@ -49,53 +54,90 @@ const DaftarCheckIn = () => {
 
   // Fungsi untuk checkIn berdasarkan index
   const handleCheckOutClick = (id) => {
-    // Temukan booking yang cocok berdasarkan id
-    const checkInToCheckOut = checkInList.find((checkin) => checkin.id === id);
+    // Menampilkan notifikasi sukses menggunakan sweetalert2
+    MySwal.fire({
+      title: "Apakah Anda yakin?",
+      text: "Pastikan tamu sudah keluar.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: isDarkMode ? "#f59e0b" : "#f59e0b",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, simpan!",
+      cancelButtonText: "Batal",
+      background: isDarkMode ? "#333" : "#fff",
+      color: isDarkMode ? "#fff" : "#000",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Menampilkan notifikasi sukses menggunakan sweetalert2
+        MySwal.fire({
+          title: "Check-Out Berhasil!",
+          text: "Data check-out berhasil disimpan.",
+          icon: "success",
+          confirmButtonText: "OK",
+          background: isDarkMode ? "#333" : "#fff",
+          color: isDarkMode ? "#fff" : "#000",
+          confirmButtonColor: isDarkMode ? "#f59e0b" : "#f59e0b",
+        }).then(() => {
+          // Temukan booking yang cocok berdasarkan id
+          const checkInToCheckOut = checkInList.find(
+            (checkin) => checkin.id === id
+          );
 
-    // Buat objek dengan status yang diperbarui
-    const updatedCheckInStatus = {
-      ...checkInToCheckOut,
-      statusBooking: "checkout",
-      statusKamar: "kosong",
-    };
+          // Buat objek dengan status yang diperbarui
+          const updatedCheckInStatus = {
+            ...checkInToCheckOut,
+            id: Date.now(),
+            statusBooking: "checkout",
+            statusKamar: "kosong",
+          };
 
-    // Filter checkInList untuk menghapus reservasi yang di-check-out
-    const updatedCheckInList = checkInList.filter(
-      (checkin) => checkin.id !== id
-    );
+          // Filter checkInList untuk menghapus reservasi yang di-check-out
+          const updatedCheckInList = checkInList.filter(
+            (checkin) => checkin.id !== id
+          );
 
-    const newRiwayatList = [...riwayatList, updatedCheckInStatus];
+          const newRiwayatList = [...riwayatList, updatedCheckInStatus];
 
-    setCheckInList(updatedCheckInList);
-    setRiwayatList(newRiwayatList);
+          setCheckInList(updatedCheckInList);
+          setRiwayatList(newRiwayatList);
 
-    // Perbarui status kamar menjadi "kosong"
-    const storedKamarList = JSON.parse(localStorage.getItem("kamarList")) || {
-      VillaTiara1: [],
-      VillaTiara2: [],
-    };
-    const updateRoomStatus = (roomList) =>
-      roomList.map((kamar) =>
-        kamar.kodeKamar === checkInToCheckOut.idKamar
-          ? { ...kamar, status: "kosong" }
-          : kamar
-      );
+          // Perbarui status kamar menjadi "kosong"
+          const storedKamarList = JSON.parse(
+            localStorage.getItem("kamarList")
+          ) || {
+            VillaTiara1: [],
+            VillaTiara2: [],
+          };
+          const updateRoomStatus = (roomList) =>
+            roomList.map((kamar) =>
+              kamar.kodeKamar === checkInToCheckOut.idKamar
+                ? { ...kamar, status: "kosong" }
+                : kamar
+            );
 
-    const updatedVillaTiara1 = updateRoomStatus(storedKamarList.VillaTiara1);
-    const updatedVillaTiara2 = updateRoomStatus(storedKamarList.VillaTiara2);
+          const updatedVillaTiara1 = updateRoomStatus(
+            storedKamarList.VillaTiara1
+          );
+          const updatedVillaTiara2 = updateRoomStatus(
+            storedKamarList.VillaTiara2
+          );
 
-    localStorage.setItem(
-      "kamarList",
-      JSON.stringify({
-        VillaTiara1: updatedVillaTiara1,
-        VillaTiara2: updatedVillaTiara2,
-      })
-    );
-    localStorage.setItem("checkInList", JSON.stringify(updatedCheckInList));
-    localStorage.setItem("riwayatList", JSON.stringify(newRiwayatList));
-
-    alert("Check-Out Berhasil!");
-    router.push("/DaftarRiwayat");
+          localStorage.setItem(
+            "kamarList",
+            JSON.stringify({
+              VillaTiara1: updatedVillaTiara1,
+              VillaTiara2: updatedVillaTiara2,
+            })
+          );
+          localStorage.setItem(
+            "checkInList",
+            JSON.stringify(updatedCheckInList)
+          );
+          localStorage.setItem("riwayatList", JSON.stringify(newRiwayatList));
+          router.push("/DaftarRiwayat"); // Mengarahkan ke halaman lain setelah notifikasi
+        });
+      }
+    });
   };
 
   // Fungsi untuk melihat invoice

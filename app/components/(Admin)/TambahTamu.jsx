@@ -4,6 +4,11 @@ import React, { useState, useEffect } from "react";
 import { FaUserPlus, FaArrowLeft, FaUserCheck } from "react-icons/fa";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { DarkModeContext } from "@/app/(contexts)/DarkModeContext";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
+const MySwal = withReactContent(Swal);
 
 const TambahTamu = () => {
   const router = useRouter();
@@ -30,8 +35,18 @@ const TambahTamu = () => {
     const updatedTamuList = [...tamuList, newTamu];
     setTamuList(updatedTamuList);
     localStorage.setItem("tamuList", JSON.stringify(updatedTamuList));
-    alert("Isi Buku Tamu Berhasil!");
-    router.push("/DaftarTamu");
+    // Menampilkan notifikasi sukses menggunakan sweetalert2
+    MySwal.fire({
+      title: "Tambah Tamu Berhasil!",
+      text: "Data tamu berhasil disimpan.",
+      icon: "success",
+      confirmButtonText: "OK",
+      background: isDarkMode ? "#333" : "#fff",
+      color: isDarkMode ? "#fff" : "#000",
+      confirmButtonColor: isDarkMode ? "#f59e0b" : "#f59e0b",
+    }).then(() => {
+      router.push("/DaftarTamu");
+    });
   };
 
   return (

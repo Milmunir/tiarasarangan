@@ -1,12 +1,12 @@
 import React from "react";
-import NavbarComponent from "@/app/components/(User)/(Beranda)/Navbar";
+import Navbar2Component from "@/app/components/(User)/Navbar2";
 import FooterComponent from "@/app/components/(User)/Footer";
 import DirectWaComponent from "@/app/components/(User)/DirectWa";
 
-const UserTemplate = ({ children }) => {
+const UserTemplate2 = ({ children }) => {
   return (
     <>
-      <NavbarComponent />
+      <Navbar2Component />
       <main>{children}</main>
       <FooterComponent />
       <DirectWaComponent />
@@ -14,4 +14,4 @@ const UserTemplate = ({ children }) => {
   );
 };
 
-export default UserTemplate;
+export default UserTemplate2;

@@ -3,40 +3,18 @@ import React, { useEffect, useState, useRef } from "react";
 import UserTemplate2 from "@/app/(templates)/(User)/UserTemplate2";
 import dynamic from "next/dynamic";
 
-const componentsTentang = [
+const componentsFaq = [
   {
-    id: "red-tentang",
-    component: dynamic(() =>
-      import("@/app/components/(User)/(Tentang)/RedTentang")
-    ),
+    id: "red-faq",
+    component: dynamic(() => import("@/app/components/(User)/(Faq)/RedFaq")),
   },
   {
-    id: "short-explain",
-    component: dynamic(() =>
-      import("@/app/components/(User)/(Tentang)/ShortExplain")
-    ),
-  },
-  {
-    id: "fasilitas-all",
-    component: dynamic(() =>
-      import("@/app/components/(User)/(Tentang)/FasilitasAll")
-    ),
-  },
-  {
-    id: "tipe-kamar-all",
-    component: dynamic(() =>
-      import("@/app/components/(User)/(Tentang)/TipeKamarAll")
-    ),
-  },
-  {
-    id: "nearby-loc",
-    component: dynamic(() =>
-      import("@/app/components/(User)/(Tentang)/NearbyLoc")
-    ),
+    id: "faq-all",
+    component: dynamic(() => import("@/app/components/(User)/(Faq)/FaqAll")),
   },
 ];
 
-const TentangPage = () => {
+const FaqPage = () => {
   const [visibleSections, setVisibleSections] = useState({});
   const observer = useRef();
 
@@ -63,8 +41,8 @@ const TentangPage = () => {
 
   return (
     <UserTemplate2>
-      <div className="tentang-container py-10 px-10 md:px-20 mt-24 text-gray-800">
-        {componentsTentang.map(({ id, component: Component }) => (
+      <div className="faq-container py-12 px-10 md:px-20 lg:px-32 mt-24 text-gray-800">
+        {componentsFaq.map(({ id, component: Component }) => (
           <div
             key={id}
             id={id}
@@ -81,4 +59,4 @@ const TentangPage = () => {
   );
 };
 
-export default TentangPage;
+export default FaqPage;

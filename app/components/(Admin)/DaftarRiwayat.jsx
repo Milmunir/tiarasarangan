@@ -8,7 +8,14 @@ import {
   FaSearch,
 } from "react-icons/fa";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
+import { useEffect, useContext, useState } from "react";
+import { DarkModeContext } from "@/app/(contexts)/DarkModeContext";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
+const MySwal = withReactContent(Swal);
 
 const DaftarRiwayat = () => {
   const [riwayatList, setRiwayatList] = useState([]);
@@ -49,18 +56,73 @@ const DaftarRiwayat = () => {
     const updatedRiwayatList = riwayatList.filter(
       (riwayat) => riwayat.id !== id
     );
-    setRiwayatList(updatedRiwayatList);
-    localStorage.setItem("riwayatList", JSON.stringify(updatedRiwayatList));
-    alert("Hapus Data Riwayat Berhasil!");
-    setFilteredRiwayatList(updatedRiwayatList);
+    // Menampilkan notifikasi sukses
+    MySwal.fire({
+      title: "Apakah Anda yakin?",
+      text: "Anda tidak akan dapat mengembalikan data ini!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: isDarkMode ? "#f59e0b" : "#f59e0b",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, hapus!",
+      cancelButtonText: "Batal",
+      background: isDarkMode ? "#333" : "#fff",
+      color: isDarkMode ? "#fff" : "#000",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Menampilkan notifikasi sukses menggunakan sweetalert2
+        MySwal.fire({
+          title: "Hapus Berhasil!",
+          text: "Data riwayat berhasil dihapus.",
+          icon: "success",
+          confirmButtonText: "OK",
+          background: isDarkMode ? "#333" : "#fff",
+          color: isDarkMode ? "#fff" : "#000",
+          confirmButtonColor: isDarkMode ? "#f59e0b" : "#f59e0b",
+        }).then(() => {
+          setRiwayatList(updatedRiwayatList);
+          localStorage.setItem(
+            "riwayatList",
+            JSON.stringify(updatedRiwayatList)
+          );
+          setFilteredRiwayatList(updatedRiwayatList);
+        });
+      }
+    });
   };
 
   // Fungsi untuk menghapus semua data riwayat
   const handleClearData = () => {
-    localStorage.removeItem("riwayatList");
-    setRiwayatList([]);
-    alert("Hapus Seluruh Data Riwayat Berhasil!");
-    setFilteredRiwayatList([]);
+    // Menampilkan notifikasi sukses menggunakan sweetalert2
+    MySwal.fire({
+      title: "Apakah Anda yakin?",
+      text: "Anda tidak akan dapat mengembalikan data ini!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: isDarkMode ? "#f59e0b" : "#f59e0b",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, hapus semuanya!",
+      cancelButtonText: "Batal",
+      background: isDarkMode ? "#333" : "#fff",
+      color: isDarkMode ? "#fff" : "#000",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Menampilkan notifikasi sukses menggunakan sweetalert2
+        MySwal.fire({
+          title: "Hapus Semuanya Berhasil!",
+          text: "Semua data riwayat berhasil dihapus.",
+          icon: "success",
+          confirmButtonText: "OK",
+          background: isDarkMode ? "#333" : "#fff",
+          color: isDarkMode ? "#fff" : "#000",
+          confirmButtonColor: isDarkMode ? "#f59e0b" : "#f59e0b",
+        }).then(() => {
+          localStorage.removeItem("riwayatList");
+          setRiwayatList([]);
+          setFilteredRiwayatList([]);
+        });
+      }
+    });
   };
 
   // Hitung indeks untuk item yang akan ditampilkan pada halaman saat ini

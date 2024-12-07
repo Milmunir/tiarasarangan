@@ -4,6 +4,7 @@ import {
   FaTachometerAlt,
   FaCalendarAlt,
   FaBook,
+  FaBed,
   FaFileAlt,
   FaSignOutAlt,
   FaChevronDown,
@@ -46,7 +47,7 @@ const SidebarAdmin = forwardRef(({ isOpen }, ref) => {
       <aside
         id="sidebar"
         ref={ref}
-        className={`text-white fixed inset-y-0 left-0 w-64 h-screen transition-transform transform ${
+        className={`text-white fixed overflow-auto scrollbar-hide inset-y-0 left-0 w-64 h-screen transition-transform transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0 z-20 duration-300 ease-in-out ${
           isDarkMode ? "bg-gray-800" : "bg-red-700"
@@ -172,6 +173,62 @@ const SidebarAdmin = forwardRef(({ isOpen }, ref) => {
                       } hover:text-white`}
                     >
                       Daftar Riwayat
+                    </a>
+                  </Link>
+                </li>
+              </ul>
+            </li>
+
+            <li
+              className={`px-6 py-4 hover:bg-gradient-to-r rounded-md ${
+                isDarkMode
+                  ? "hover:from-gray-700 hover:to-gray-900"
+                  : "hover:from-orange-500 hover:to-red-500"
+              }`}
+            >
+              <button
+                className="w-full flex items-center px-2 font-medium focus:outline-none"
+                onClick={() => toggleDropdown("kamar")}
+              >
+                <FaBed className="w-6 h-6" />
+                <span
+                  className={`ml-3 ${
+                    isDarkMode ? "text-gray-400" : "text-gray-300"
+                  } hover:text-white`}
+                >
+                  Kamar
+                </span>
+                <FaChevronDown
+                  className={`ml-auto w-4 h-4 transform transition-transform duration-300 ${
+                    dropdowns.kamar ? "rotate-180" : "rotate-0"
+                  }`}
+                />
+              </button>
+              <ul
+                id="kamar-menu"
+                className={`list-disc ml-14 mt-4 space-y-2 pb-2 transition-all duration-300 ease-in-out transform ${
+                  dropdowns.kamar ? "" : "hidden"
+                }`}
+              >
+                <li>
+                  <Link href="/DaftarKamar" passHref legacyBehavior>
+                    <a
+                      className={`${
+                        isDarkMode ? "text-gray-400" : "text-gray-300"
+                      } hover:text-white`}
+                    >
+                      Daftar Kamar
+                    </a>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/StatusKamar" passHref legacyBehavior>
+                    <a
+                      className={`${
+                        isDarkMode ? "text-gray-400" : "text-gray-300"
+                      } hover:text-white`}
+                    >
+                      Status Kamar
                     </a>
                   </Link>
                 </li>

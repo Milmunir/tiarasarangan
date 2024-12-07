@@ -1,6 +1,18 @@
 @import "~@glidejs/glide/dist/css/glide.core.min.css";
 @import "~@glidejs/glide/dist/css/glide.theme.min.css";
 
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
+
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Parkinsans:wght@300..800&display=swap");
+
+@font-face {
+  font-family: "Brush Script MT";
+  src: url("/fonts/BRUSHSCI.TTF") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -12,15 +24,19 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #e8e8e8;
+    --background: #eaecee;
     --foreground: #000000;
   }
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Nunito Sans", sans-serif;
 }
 
 .gambar {
@@ -41,11 +57,18 @@ body {
 
 .logo {
   font-family: "Brush Script MT", cursive;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 #sidebar {
   z-index: 50;
+}
+
+.font-jumbo {
+  font-family: "Parkinsans", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
 }
 
 /* Animasi kecil pada form */
@@ -164,4 +187,41 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* Warna ikon kalender untuk mode gelap */
 .dark input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(1) brightness(1) sepia(1) saturate(3) hue-rotate(200deg);
+}
+
+/*===============================*/
+
+.custom-pagination-bullet {
+  background-color: #ff0000; /* Warna merah */
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  opacity: 0.8;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.custom-pagination-bullet-active {
+  background-color: #ff0000; /* Warna merah untuk bullet aktif */
+  transform: scale(1.5); /* Efek pembesaran */
+  opacity: 1; /* Kecerahan penuh untuk bullet aktif */
+}
+.custom-next,
+.custom-prev {
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.custom-next:hover,
+.custom-prev:hover {
+  transform: scale(1.1);
+}
+
+/*===============================*/
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1s ease, transform 1.6s ease;
+}
+
+.fade-in-visible {
+  opacity: 1;
+  transform: translateY(0);
 }

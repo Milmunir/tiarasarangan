@@ -1,13 +1,13 @@
 import React from "react";
-import UserTemplate from "@/app/(templates)/(User)/UserTemplate";
-import GaleriComponent from "@/app/components/(User)/Galeri";
+import UserTemplate2 from "@/app/(templates)/(User)/UserTemplate2";
+import GaleriAllComponent from "@/app/components/(User)/(Galeri)/GaleriAll";
 
-const GalleryPage = () => {
+const GaleriPage = () => {
   return (
-    <UserTemplate>
-      <GaleriComponent />
-    </UserTemplate>
+    <UserTemplate2>
+      <GaleriAllComponent />
+    </UserTemplate2>
   );
 };
 
-export default GalleryPage;
+export default GaleriPage;

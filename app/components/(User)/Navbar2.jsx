@@ -13,17 +13,15 @@ import {
 } from "react-icons/fa";
 
 const menuItems = [
-  { name: "Beranda", target: "#beranda" },
-  { name: "Tentang", target: "#tentang" },
-  { name: "Tipe Kamar", target: "#tipe-kamar" },
-  { name: "Fasilitas", target: "#fasilitas" },
-  { name: "Galeri", target: "#galeri" },
-  { name: "Testimoni", target: "#testimoni" },
-  { name: "Artikel", target: "#artikel" },
-  { name: "FAQ", target: "#faq" },
+  { name: "Beranda", target: "/Beranda" },
+  { name: "Tentang", target: "/Tentang" },
+  { name: "Tipe Kamar", target: "/TipeKamar" },
+  { name: "Galeri", target: "/Galeri" },
+  { name: "Artikel", target: "/Artikel" },
+  { name: "FAQ", target: "/Faq" },
 ];
 
-const NavbarComponent = () => {
+const Navbar2Component = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -49,15 +47,11 @@ const NavbarComponent = () => {
   return (
     <header
       id="navbar"
-      className={`fixed left-0 right-0 top-0 z-10 transition-all duration-300 ${
-        scrolled
-          ? "bg-white bg-opacity-100 text-black shadow-lg"
-          : "bg-opacity-0 text-white"
-      }`}
+      className={`fixed left-0 right-0 top-0 z-10 transition-all duration-300 bg-white bg-opacity-100 text-black shadow-lg"`}
     >
       <div
-        className={`space-x-4 bg-black bg-opacity-40 text-white text-sm transition-all duration-300 ${
-          scrolled ? "hidden py-2" : "flex py-4"
+        className={`space-x-4 bg-black bg-opacity-70 text-white text-xs md:text-sm transition-all duration-300 py-3 md:py-4 ${
+          scrolled ? "hidden" : "flex"
         }`}
       >
         <div className="container mx-auto md:px-4 flex md:justify-between justify-center">
@@ -73,27 +67,27 @@ const NavbarComponent = () => {
               <span>No. 193, Jl, Raya Telaga Sarangan 63361 Magetan</span>
             </a>
             <a
-              href="https://wa.me/6281234567890"
+              href="https://wa.me/6281335623403"
               target="_blank"
               rel="noreferrer"
               className="flex items-center hover:text-yellow-300"
               title="WhatsApp"
             >
               <FaPhoneAlt className="mr-2 text-red-500" />
-              <span>0831-2760-5430</span>
+              <span>0813-3562-3403</span>
             </a>
             <a
-              href="mailto:email@example.com"
+              href="mailto:tiarasarangan2@gmail.com"
               target="_blank"
               rel="noreferrer"
               className="flex items-center hover:text-yellow-300"
               title="Email"
             >
               <FaEnvelope className="mr-2 text-red-500" />
-              <span>villatiara@gmail.com</span>
+              <span>tiarasarangan2@gmail.com</span>
             </a>
           </div>
-          <div className="hidden md:flex space-x-4 items-center">
+          <div className="hidden lg:flex space-x-4 items-center">
             <a
               href="https://instagram.com/villatiara.sarangan"
               target="_blank"
@@ -104,7 +98,7 @@ const NavbarComponent = () => {
               <FaInstagram className="mr-2" />
             </a>
             <a
-              href="https://x.com/@username"
+              href=""
               target="_blank"
               rel="noreferrer"
               className="hover:text-yellow-300"
@@ -122,7 +116,7 @@ const NavbarComponent = () => {
               <FaTiktok className="mr-2" />
             </a>
             <a
-              href="https://youtube.com/c/username"
+              href="https://youtube.com/@villatiarasarangan9576"
               target="_blank"
               rel="noreferrer"
               className="hover:text-yellow-300"
@@ -133,14 +127,11 @@ const NavbarComponent = () => {
           </div>
         </div>
       </div>
-      <div className="container mx-auto flex justify-between items-center py-4 px-10">
+      <div
+        className={`container mx-auto flex justify-between items-center px-6 py-2 md:py-3`}
+      >
         <Link href="/Login">
-          <h1
-            id="logo"
-            className={`logo text-3xl md:text-4xl mt-1 items-center justify-center ${
-              scrolled ? "text-red-700" : "text-white"
-            }`}
-          >
+          <h1 id="logo" className={`logo text-3xl md:text-4xl text-red-700`}>
             Villa Tiara
           </h1>
         </Link>
@@ -148,18 +139,20 @@ const NavbarComponent = () => {
         <nav>
           <button
             id="menu-toggle"
-            className="md:hidden text-2xl font-bold focus:outline-none"
+            className={`lg:hidden text-2xl focus:outline-none font-semibold`}
             onClick={handleMenuToggle}
           >
-            ☰
+            &#9776;
           </button>
           {/* Menu Desktop */}
-          <ul className="hidden md:flex space-x-8 text-md py-3 font-semibold">
+          <ul
+            className={`hidden overflow-y-auto lg:flex space-x-8 text-md py-2 font-bold text-gray-800`}
+          >
             {menuItems.map((item) => (
               <li key={item.target}>
                 <a
                   href={item.target}
-                  className="hover:text-yellow-300 cursor-pointer"
+                  className={`cursor-pointer hover:text-red-500`}
                 >
                   {item.name}
                 </a>
@@ -171,27 +164,29 @@ const NavbarComponent = () => {
       {/* Menu Mobile */}
       <div
         id="mobile-menu"
-        className={`fixed top-0 left-0 h-full w-64 bg-black bg-opacity-90 text-white transform transition-transform duration-300 flex flex-col items-start p-5 space-y-6 text-lg z-20 ${
+        className={`fixed top-0 left-0 h-full w-60 bg-gray-900 bg-opacity-95 text-white transform transition-transform duration-300 ease-in-out flex flex-col items-start p-5 space-y-6 z-20 ${
           isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <button
           id="close-menu"
-          className="text-2xl font-bold self-end focus:outline-none"
+          className="text-xl font-bold self-end focus:outline-none"
           onClick={handleCloseMenu}
+          aria-label="Close Menu"
         >
           ✖
         </button>
-        <ul className="text-lg pl-5">
+        <ul className="text-lg w-full pl-2">
           {menuItems.map((item) => (
-            <li key={item.target} className="py-2">
-              <a
-                href={item.target}
-                className="hover:text-yellow-300 hover:text-xl cursor-pointer"
-                onClick={handleCloseMenu}
-              >
-                {item.name}
-              </a>
+            <li key={item.target} className="w-full">
+              <Link href={item.target} legacyBehavior>
+                <a
+                  className="block py-2 px-4 w-full hover:bg-yellow-300 hover:text-gray-900 hover:font-semibold rounded transition duration-300 ease-in-out"
+                  onClick={handleCloseMenu}
+                >
+                  {item.name}
+                </a>
+              </Link>
             </li>
           ))}
         </ul>
@@ -200,4 +195,4 @@ const NavbarComponent = () => {
   );
 };
 
-export default NavbarComponent;
+export default Navbar2Component;

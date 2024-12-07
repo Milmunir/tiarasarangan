@@ -17,7 +17,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "voenews.com.br",
+        hostname: "content.skyscnr.com",
         port: "",
         pathname: "**",
       },

@@ -8,7 +8,12 @@ import {
 } from "react-icons/fa";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useContext, useState } from "react";
+import { DarkModeContext } from "@/app/(contexts)/DarkModeContext";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
+const MySwal = withReactContent(Swal);
 
 const DaftarTamu = () => {
   const router = useRouter();
@@ -41,18 +46,70 @@ const DaftarTamu = () => {
   // Fungsi untuk menghapus tamu berdasarkan id
   const handleDelete = (id) => {
     const updatedTamuList = tamuList.filter((tamu) => tamu.id !== id);
-    setTamuList(updatedTamuList);
-    localStorage.setItem("tamuList", JSON.stringify(updatedTamuList));
-    alert("Hapus Data Tamu Berhasil!");
-    setFilteredTamuList(updatedTamuList);
+    // Menampilkan notifikasi sukses
+    MySwal.fire({
+      title: "Apakah Anda yakin?",
+      text: "Anda tidak akan dapat mengembalikan data ini!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: isDarkMode ? "#f59e0b" : "#f59e0b",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, hapus!",
+      cancelButtonText: "Batal",
+      background: isDarkMode ? "#333" : "#fff",
+      color: isDarkMode ? "#fff" : "#000",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Menampilkan notifikasi sukses menggunakan sweetalert2
+        MySwal.fire({
+          title: "Hapus Berhasil!",
+          text: "Data tamu berhasil dihapus.",
+          icon: "success",
+          confirmButtonText: "OK",
+          background: isDarkMode ? "#333" : "#fff",
+          color: isDarkMode ? "#fff" : "#000",
+          confirmButtonColor: isDarkMode ? "#f59e0b" : "#f59e0b",
+        }).then(() => {
+          setTamuList(updatedTamuList);
+          localStorage.setItem("tamuList", JSON.stringify(updatedTamuList));
+          setFilteredTamuList(updatedTamuList);
+        });
+      }
+    });
   };
 
   // Fungsi untuk clear semua data tamu
   const handleClearData = () => {
-    localStorage.removeItem("tamuList");
-    setTamuList([]);
-    alert("Hapus Seluruh Data Tamu Berhasil!");
-    setFilteredTamuList([]);
+    // Menampilkan notifikasi sukses menggunakan sweetalert2
+    MySwal.fire({
+      title: "Apakah Anda yakin?",
+      text: "Anda tidak akan dapat mengembalikan data ini!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: isDarkMode ? "#f59e0b" : "#f59e0b",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, hapus semuanya!",
+      cancelButtonText: "Batal",
+      background: isDarkMode ? "#333" : "#fff",
+      color: isDarkMode ? "#fff" : "#000",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Menampilkan notifikasi sukses menggunakan sweetalert2
+        MySwal.fire({
+          title: "Hapus Semuanya Berhasil!",
+          text: "Semua data tamu berhasil dihapus.",
+          icon: "success",
+          confirmButtonText: "OK",
+          background: isDarkMode ? "#333" : "#fff",
+          color: isDarkMode ? "#fff" : "#000",
+          confirmButtonColor: isDarkMode ? "#f59e0b" : "#f59e0b",
+        }).then(() => {
+          localStorage.removeItem("tamuList");
+          setTamuList([]);
+          setFilteredTamuList([]);
+        });
+      }
+    });
   };
 
   // Fungsi untuk navigasi ke halaman tambah tamu
