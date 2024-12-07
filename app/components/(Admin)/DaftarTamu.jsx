@@ -17,7 +17,6 @@ const MySwal = withReactContent(Swal);
 
 const DaftarTamu = () => {
   const router = useRouter();
-  const { isDarkMode } = useContext(DarkModeContext);
   const [tamuList, setTamuList] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredTamuList, setFilteredTamuList] = useState([]);
@@ -184,7 +183,7 @@ const DaftarTamu = () => {
                     {indexOfFirstItem + index + 1}
                   </td>
                   <td className="border px-6 py-2 dark:border-gray-700">
-                    {tamu.tanggalWaktu}
+                    {tamu.tanggal} {tamu.waktu}
                   </td>
                   <td className="border px-6 py-2 dark:border-gray-700">
                     {tamu.namaLengkap}

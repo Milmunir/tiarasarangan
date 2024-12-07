@@ -20,7 +20,6 @@ const MySwal = withReactContent(Swal);
 
 const DaftarCheckIn = () => {
   const router = useRouter();
-  const { isDarkMode } = useContext(DarkModeContext);
   const [checkInList, setCheckInList] = useState([]);
   const [riwayatList, setRiwayatList] = useState([]);
   const [invoiceData, setInvoiceData] = useState(null);
@@ -193,26 +192,16 @@ const DaftarCheckIn = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {currentItems.length > 0 ? (
             currentItems.map((checkin, index) => (
-              <div
-                key={index}
-                className="border border-gray-200 dark:border-gray-700 p-4 rounded-lg shadow-md bg-gray-50 dark:bg-gray-800 hover:shadow-lg transition-transform transform hover:scale-105"
-              >
+              <div key={index} className="border border-gray-200 dark:border-gray-700 p-4 rounded-lg shadow-md bg-gray-50 dark:bg-gray-800 hover:shadow-lg transition-transform transform hover:scale-105" >
                 <div className="flex flex-col justify-between h-full">
                   <div className="mb-4">
                     <h4 className="text-lg font-bold text-gray-700 dark:text-gray-200">
                       {checkin.idKamar}
                     </h4>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm">
-                      Check-in: {checkin.tanggalCheckIn}
-                    </p>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm">
-                      Check-out: {checkin.tanggalCheckOut}
-                    </p>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">Check-in: {checkin.tanggalCheckIn}</p>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">Check-out: {checkin.tanggalCheckOut}</p>
                   </div>
-                  <button
-                    onClick={() => viewInvoice(checkin)}
-                    className="flex items-center justify-center w-full bg-gradient-to-r from-orange-500 to-red-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg shadow transition"
-                  >
+                  <button onClick={() => viewInvoice(checkin)} className="flex items-center justify-center w-full bg-gradient-to-r from-orange-500 to-red-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg shadow transition">
                     <FaFileInvoice className="mr-2" />
                     Lihat Invoice
                   </button>
@@ -228,32 +217,28 @@ const DaftarCheckIn = () => {
 
         <div className="flex items-center justify-between mt-8">
           <div>
-            <Link
-              href="/DaftarBooking"
-              className="flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-yellow-500 transition"
-            >
+            <Link href="/DaftarBooking" className="flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-yellow-500 transition">
               <FaArrowLeft className="mr-2" />
               Kembali
             </Link>
           </div>
-          <div>
+          {/* <div>
             {Array.from(
               { length: Math.ceil(filteredCheckInList.length / itemsPerPage) },
               (_, index) => (
                 <button
                   key={index}
                   onClick={() => handlePageChange(index + 1)}
-                  className={`mx-1 px-4 p-2 rounded ${
-                    currentPage === index + 1
+                  className={`mx-1 px-4 p-2 rounded ${currentPage === index + 1
                       ? "bg-gradient-to-r from-orange-500 to-red-500 text-white"
                       : "bg-gray-300 dark:bg-gray-700 dark:text-gray-300"
-                  }`}
+                    }`}
                 >
                   {index + 1}
                 </button>
               )
             )}
-          </div>
+          </div> */}
         </div>
       </div>
 

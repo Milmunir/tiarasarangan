@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { FaUserPlus, FaArrowLeft, FaUserCheck } from "react-icons/fa";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -12,7 +12,6 @@ const MySwal = withReactContent(Swal);
 
 const TambahTamu = () => {
   const router = useRouter();
-  const { isDarkMode } = useContext(DarkModeContext);
   const [tamuList, setTamuList] = useState([]);
 
   useEffect(() => {
@@ -29,7 +28,8 @@ const TambahTamu = () => {
       namaLengkap: e.target.nama_lengkap.value,
       noHp: e.target.no_hp.value,
       keperluan: e.target.keperluan.value,
-      tanggalWaktu: new Date().toLocaleString(),
+      tanggal: new Date().toLocaleDateString(),
+      waktu: new Date().toLocaleTimeString(),
     };
 
     const updatedTamuList = [...tamuList, newTamu];
@@ -74,7 +74,7 @@ const TambahTamu = () => {
               />
               <label
                 htmlFor="nama_lengkap"
-                className="absolute left-4 top-3 text-gray-500 dark:text-gray-400 rounded-xl transition-all"
+                className="absolute left-4 top-3 text-gray-500 dark:text-gray-400 transition-all"
               >
                 Nama Lengkap
               </label>
@@ -92,7 +92,7 @@ const TambahTamu = () => {
               />
               <label
                 htmlFor="no_hp"
-                className="absolute left-4 top-3 text-gray-500 dark:text-gray-400 rounded-xl transition-all"
+                className="absolute left-4 top-3 text-gray-500 dark:text-gray-400 transition-all"
               >
                 Nomor HP
               </label>
@@ -109,7 +109,7 @@ const TambahTamu = () => {
               />
               <label
                 htmlFor="keperluan"
-                className="absolute left-4 top-3 text-gray-500 dark:text-gray-400 rounded-xl transition-all"
+                className="absolute left-4 top-3 text-gray-500 dark:text-gray-400 transition-all"
               >
                 Keperluan
               </label>
